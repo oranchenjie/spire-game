@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>尖塔之魂 · 完整攻略</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0820;color:#e0d8f0;font-family:'Segoe UI','Microsoft YaHei',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0820}::-webkit-scrollbar-thumb{background:#3a3080;border-radius:3px}
+.header{background:linear-gradient(135deg,#1a1040,#2a1a60,#1a1040);padding:18px 24px;border-bottom:2px solid #4a3a90;position:sticky;top:0;z-index:100}
+.header h1{font-size:22px;background:linear-gradient(90deg,#FFD700,#FF6B6B,#E040FB);-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:inline}
+.header span{color:#888;font-size:13px;margin-left:12px}
+.tabs{display:flex;gap:2px;background:#0a0820;padding:0 12px;position:sticky;top:62px;z-index:99;flex-wrap:wrap;border-bottom:1px solid #2a1a60}
+.tab{padding:10px 16px;cursor:pointer;font-size:13px;color:#999;border-radius:8px 8px 0 0;transition:.2s;background:transparent;border:none;font-family:inherit;white-space:nowrap}
+.tab:hover{color:#fff;background:rgba(74,58,144,0.3)}
+.tab.active{color:#FFD700;background:rgba(74,58,144,0.5)}
+.tab .badge{background:#4a3a90;color:#ccc;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px}
+.tab.active .badge{background:#FFD700;color:#1a1040}
+.content{display:none;padding:16px 20px;max-width:1200px;margin:auto}
+.content.active{display:block}
+.search-bar{display:flex;gap:10px;margin:12px 0;flex-wrap:wrap}
+.search-bar input{flex:1;min-width:200px;padding:10px 14px;border-radius:8px;border:1px solid #3a3080;background:#120828;color:#e0d8f0;font-size:14px;outline:none}
+.search-bar input:focus{border-color:#FFD700}
+.search-bar select{padding:8px 12px;border-radius:8px;border:1px solid #3a3080;background:#120828;color:#e0d8f0;font-size:13px;outline:none;cursor:pointer}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:10px;margin-top:10px}
+.entry{background:linear-gradient(135deg,#120828,#1a0e38);border:1px solid #2a1a60;border-radius:10px;padding:12px;transition:.2s;position:relative;overflow:hidden}
+.entry:hover{border-color:#4a3a90;transform:translateY(-2px);box-shadow:0 4px 20px rgba(74,58,144,0.3)}
+.entry .name{font-size:14px;font-weight:700;color:#FFD700;margin-bottom:3px}
+.entry .sub{font-size:11px;color:#888;margin-bottom:4px;display:flex;gap:8px;flex-wrap:wrap}
+.entry .sub .tag{padding:1px 6px;border-radius:4px;font-size:10px}
+.entry .desc{font-size:12px;color:#bbb;line-height:1.5}
+.tag.attack{background:rgba(255,68,68,0.2);color:#FF6B6B}.tag.skill{background:rgba(100,181,246,0.2);color:#64B5F6}.tag.power{background:rgba(171,139,255,0.2);color:#AD8BFF}
+.tag.basic{background:rgba(150,150,150,0.2);color:#aaa}.tag.common{background:rgba(76,175,80,0.2);color:#4CAF50}.tag.uncommon{background:rgba(100,181,246,0.2);color:#64B5F6}.tag.rare{background:rgba(255,215,0,0.2);color:#FFD700}
+.tag.self{background:rgba(171,139,255,0.15);color:#AD8BFF}.tag.enemy{background:rgba(255,68,68,0.15);color:#FF6B6B}.tag.all{background:rgba(255,152,0,0.15);color:#FF9800}
+.tag.elite{background:rgba(255,68,68,0.3);color:#FF4444}.tag.boss{background:rgba(255,215,0,0.3);color:#FFD700}
+.entry .cost{position:absolute;top:8px;right:10px;font-size:13px;font-weight:700}.cost.e0{color:#4CAF50}.cost.e1{color:#64B5F6}.cost.e2{color:#FF9800}.cost.e3{color:#FF6B6B}
+.card-icon{display:inline-block;width:36px;height:50px;border-radius:4px;margin-right:8px;border:1px solid rgba(255,255,255,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(0,0,0,0.3)}
+.card-header{display:flex;align-items:center}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.filter-btn{padding:4px 12px;border-radius:14px;border:1px solid #3a3080;background:transparent;color:#999;cursor:pointer;font-size:11px;transition:.2s;font-family:inherit}
+.filter-btn:hover{border-color:#4a3a90;color:#fff}
+.filter-btn.active{background:#4a3a90;border-color:#AD8BFF;color:#fff}
+.count{font-size:12px;color:#666;margin:4px 0}.count b{color:#AD8BFF}
+.boss-entry{border-color:#5a3080;background:linear-gradient(135deg,#1a0848,#2a1058)}.boss-entry .name{color:#FF6B6B}
+.elite-entry{border-color:#3a2070}
+
+/* Strategy card styles */
+.strat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;margin-top:10px}
+.strat-card{background:linear-gradient(135deg,#120828,#1a0e38);border:1px solid #2a1a60;border-radius:12px;padding:18px}
+.strat-card h3{color:#FFD700;font-size:15px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #2a1a60}
+.strat-card h4{color:#E040FB;font-size:13px;margin:10px 0 5px}
+.strat-card p,.strat-card li{font-size:12.5px;color:#bbb;line-height:1.7;margin-bottom:4px}
+.strat-card ul{padding-left:18px}
+.strat-card .highlight{color:#FFD700}.strat-card .dmg{color:#FF6B6B}.strat-card .blk{color:#64B5F6}.strat-card .spe{color:#E040FB}
+.strat-card .pick{color:#4CAF50;font-weight:700}.strat-card .avoid{color:#FF5252;font-weight:700}.strat-card .situ{color:#FF9800;font-weight:700}
+
+/* Boss section */
+.boss-strat{border:1px solid #5a3080;background:linear-gradient(135deg,#1a0848,#2a1058)}
+.boss-strat h3{color:#FF6B6B}
+
+/* Char intro banner */
+.char-banner{display:flex;gap:16px;align-items:start;padding:16px;border-radius:12px;margin-bottom:14px}
+.char-banner .icon{font-size:48px;flex-shrink:0;width:64px;text-align:center}
+.char-banner .info{flex:1}
+.char-banner .info h2{font-size:18px;margin-bottom:4px}
+.char-banner .info p{font-size:12.5px;color:#bbb;line-height:1.6}
+
+/* Highlight box */
+.tip-box{background:#0a0418;border-left:3px solid #AD8BFF;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:12px;color:#ccc;line-height:1.6}
+.tip-box.gold{border-left-color:#FFD700}
+.tip-box.red{border-left-color:#FF6B6B}
+.tip-box.green{border-left-color:#4CAF50}
+
+/* Combo grid */
+.combo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:8px 0}
+.combo-item{background:rgba(10,4,24,0.6);border-radius:8px;padding:10px;border:1px solid #2a1a60}
+.combo-item .cname{color:#FFD700;font-size:12px;font-weight:700}
+.combo-item .cdesc{color:#bbb;font-size:11px;margin-top:2px}
+
+@media(max-width:640px){.card-grid{grid-template-columns:1fr}.strat-grid{grid-template-columns:1fr}.tabs .tab{padding:8px 10px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="header"><h1>尖塔之魂 · 完整攻略</h1><span>新手入门 · 角色指南 · 流派构建 · Boss对策 · 全数据查询</span></div>
+<div class="tabs">
+  <button class="tab active" data-tab="home">入门指南</button>
+  <button class="tab" data-tab="strategy">角色攻略</button>
+  <button class="tab" data-tab="builds">流派构建</button>
+  <button class="tab" data-tab="boss">Boss攻略</button>
+  <button class="tab" data-tab="cards">卡牌图鉴 <span class="badge">517</span></button>
+  <button class="tab" data-tab="relics">遗物图鉴</button>
+  <button class="tab" data-tab="enemies">敌人图鉴 <span class="badge">74</span></button>
+  <button class="tab" data-tab="potions">药水</button>
+  <button class="tab" data-tab="events">事件</button>
+  <button class="tab" data-tab="mechanics">机制数据</button>
+</div>
+<div class="content active" id="tab-home">
+<div style="max-width:860px;margin:auto">
+
+<h2 style="color:#FFD700;font-size:20px;margin:16px 0 10px">尖塔之魂 完全攻略</h2>
+<p style="color:#bbb;font-size:13.5px;line-height:1.8">这是一款类<杀戮尖塔>的卡牌构筑游戏。你将选择一位角色攀登尖塔，每层三选一路线前进，击败怪物获取卡牌和遗物强化牌组，最终战胜每层Boss。<br>本攻略涵盖角色解析、流派构建、Boss对策、全数据查询等，助你轻松通关。</p>
+
+<h3 style="color:#E040FB;margin:20px 0 10px">新手入门六条黄金法则</h3>
+<div class="tip-box gold">1. <b>删牌比抓牌重要</b> — 牌组越精简越好，优先在商店移除打击/防御等基础牌。牌组越小，关键牌上手率越高。</div>
+<div class="tip-box gold">2. <b>路线选择看Boss</b> — 根据Boss类型决定路线：打Aoe弱的Boss多走精英拿遗物，生存压力大就走篝火路线。</div>
+<div class="tip-box gold">3. <b>精英不是必须打</b> — 第一幕精英较简单可优先打拿遗物，但第三幕精英往往非常危险，量力而行。</div>
+<div class="tip-box gold">4. <b>优先拿过牌</b> — 过牌能力决定了牌组的上限，不能过牌的力量再高也打不出来。</div>
+<div class="tip-box gold">5. <b>AOE是生存之本</b> — 多敌战斗频繁，至少要有1张AOE牌应对群怪，否则会被小怪群殴致死。</div>
+<div class="tip-box gold">6. <b>血量是资源</b> — 不需要追求无伤过小怪。适当卖血走精英路线换取遗物，长远收益更大。</div>
+
+<h3 style="color:#E040FB;margin:24px 0 10px">通用策略</h3>
+<div class="strat-grid" style="grid-template-columns:1fr 1fr">
+<div class="strat-card">
+<h4>路线规划</h4>
+<ul>
+<li>看Boss决定路线 — 群战Boss需要AOE, 单体Boss需要爆发</li>
+<li>幕1多走精英(较简单)拿遗物建立优势</li>
+<li>幕2篝火重要 — 血量和升级需求大</li>
+<li>幕3尽量跳过多精英路线, 留状态打Boss</li>
+<li>商店楼层前留金币买关键遗物</li>
+</ul>
+</div>
+<div class="strat-card">
+<h4>牌组管理</h4>
+<ul>
+<li>牌组控制在25-35张最佳, 太多关键牌难上手</li>
+<li>每张牌问自己: 它能改善我现在的战斗力吗?</li>
+<li>不要为"未来可能有用"抓牌, 解决当前问题优先</li>
+<li>移除诅咒牌优先级高于升级</li>
+<li>事件中的删牌机会非常珍贵, 优先选</li>
+</ul>
+</div>
+<div class="strat-card">
+<h4>遗物优先级</h4>
+<ul>
+<li>能量遗物(符文穹顶/日晷等) — 更多能量=更多操作</li>
+<li>过牌遗物(准备袋/墨水等) — 牌组运转核心</li>
+<li>防御遗物(船锚/角钉等) — 缓解前期压力</li>
+<li>成长遗物(金刚杵/手里剑等) — 长期收益</li>
+<li class="highlight">会员卡 → 兵书 → 开心花 → 墨水(通用强)</li>
+</ul>
+</div>
+<div class="strat-card">
+<h4>商店购买优先级</h4>
+<ol style="padding-left:18px;font-size:12.5px;color:#bbb">
+<li>关键遗物(会员卡/金刚杵等) — 立即提升战力</li>
+<li>移除诅咒/基础牌 — 精简牌组</li>
+<li>关键卡牌 — 补强流派核心</li>
+<li>药水 — 应急用, 战斗前记得喝</li>
+<li>升级 — 篝火也能做, 优先级最低</li>
+</ol>
+</div>
+</div>
+
+<h3 style="color:#E040FB;margin:24px 0 10px">难度说明</h3>
+<div style="background:#120828;border-radius:10px;padding:14px;margin-bottom:16px">
+<table class="stance-table"><tr><th>难度</th><th>怪物HP</th><th>怪物伤害</th><th>初始抽牌</th><th>推荐</th></tr>
+<tr><td>普通</td><td>×1.0</td><td>×1.0</td><td>5张</td><td>新手首选</td></tr>
+<tr><td>困难</td><td>×1.3</td><td>×1.35</td><td>4张</td><td>熟悉后挑战</td></tr>
+<tr><td>噩梦</td><td>×1.6</td><td>×1.7</td><td>4张</td><td>高手向</td></tr>
+</table>
+</div>
+
+</div></div>
+<div class="content" id="tab-strategy">
+<div style="max-width:900px;margin:auto">
+
+<h2 style="color:#FFD700;font-size:20px;margin:16px 0 10px">角色攻略</h2>
+
+<!-- 铁甲 -->
+<div class="char-banner" style="background:linear-gradient(135deg,rgba(255,68,68,0.08),rgba(20,8,40,0.8))">
+<div class="icon">&#x1F525;</div>
+<div class="info"><h2 style="color:#FF6B6B">铁甲战士</h2><p>初始遗物: 燃烧之血(战斗后回复10HP) | 核心机制: 力量叠层、自残增益、消耗体系<br>优势: 爆发高、回复强、AOE充足 | 劣势: 过牌慢、灵活度低</p></div>
+</div>
+<div class="strat-grid">
+<div class="strat-card">
+<h4>&#x1F3AF; 必抓核心牌</h4>
+<div class="tip-box green"><b>力量核心:</b> 活动肌肉、突破极限、金刚臂、观察弱点、燃烧</div>
+<div class="tip-box green"><b>过牌/运转:</b> 剑柄打击、战吼、燃烧契约、祭品、硬撑</div>
+<div class="tip-box green"><b>防御:</b> 耸肩、坚毅、幽灵护甲、金属化、堡垒</div>
+<div class="tip-box green"><b>AOE:</b> 旋风斩、燔祭、全体攻击、火山喷发</div>
+<div class="tip-box red"><b>避坑:</b> 狂野打击(塞伤口)、燔祭(无AOE需求时别拿太多)</div>
+</div>
+<div class="strat-card">
+<h4>&#x1F4A1; 玩法思路</h4>
+<ul>
+<li><b>力量流:</b> 快速叠力量 → 用多段攻击(金刚臂/双持)打出爆炸伤害</li>
+<li><b>消耗流:</b> 腐化+黑暗之拥+坚毅 = 无限循环</li>
+<li><b>自残流:</b> 撕裂+祭品+金属化 → 自残触发力量+防御</li>
+<li>铁甲的最大问题是过牌, 遇到祭品/战吼/燃烧契约必抓</li>
+<li>燃烧之血是极好的续航遗物, 可以利用它走精英路线</li>
+</ul>
+</div>
+<div class="strat-card">
+<h4>&#x1F91D; 关键Combo</h4>
+<div class="combo-item"><div class="cname">腐化 + 黑暗之拥 + 坚毅</div><div class="cdesc">核心无限。腐化使技能牌0费消耗, 黑暗之拥抽牌, 坚毅格挡。启动后基本无敌</div></div>
+<div class="combo-item"><div class="cname">突破极限 + 活动肌肉 + 金刚臂</div><div class="cdesc">力量乘法。活动肌肉给力量, 突破极限翻倍, 金刚臂多段打满</div></div>
+<div class="combo-item"><div class="cname">祭品 + 撕裂 + 金属化</div><div class="cdesc">自残循环。祭品给能量过牌, 撕裂将自残转为力量, 金属化给格挡</div></div>
+</div>
+<div class="strat-card">
+<h4>&#x26A1; 升级优先级</h4>
+<p><b>T0(优先升级):</b> 祭品(抽更多)、活动肌肉(力量+抽牌)、突破极限</p>
+<p><b>T1(推荐升级):</b> 旋风斩、金刚臂、耸肩、剑柄打击</p>
+<p><b>T2:</b> 燃烧、战吼、硬撑</p>
+</div>
+</div>
+
+<!-- 静默 -->
+<div class="char-banner" style="background:linear-gradient(135deg,rgba(76,175,80,0.08),rgba(20,8,40,0.8));margin-top:20px">
+<div class="icon">&#x1F5E1;</div>
+<div class="info"><h2 style="color:#4CAF50">静默猎手</h2><p>初始遗物: 蛇之戒(首回合+1能+2抽) | 核心机制: 敏捷、毒药、小刀、弃牌<br>优势: 过牌极强、防御灵活、毒药无视格挡 | 劣势: 爆发慢、AOE依赖遗物</p></div>
+</div>
+<div class="strat-grid">
+<div class="strat-card">
+<h4>&#x1F3AF; 必抓核心牌</h4>
+<div class="tip-box green"><b>毒药流:</b> 致命毒药、毒雾、催化、尸体爆炸、毒爆</div>
+<div class="tip-box green"><b>小刀流:</b> 斗篷与匕首、刀锋风暴、淬毒刃、无限刀锋</div>
+<div class="tip-box green"><b>过牌/运转:</b> 后空翻、杂技、战术家、计算下注、预谋</div>
+<div class="tip-box green"><b>防御:</b> 扫腿、敏捷、残影、幽魂形态</div>
+<div class="tip-box red"><b>避坑:</b> 玻璃刀刃(消耗掉就没了)、终结技(牌多才强)</div>
+</div>
+<div class="strat-card">
+<h4>&#x1F4A1; 玩法思路</h4>
+<ul>
+<li><b>毒药流:</b> 叠毒→催化翻倍→尸体爆炸清场, 慢热但无视防御</li>
+<li><b>小刀流:</b> 无限小刀→淬毒刃附加中毒→刀锋风暴AOE</li>
+<li><b>弃牌流:</b> 杂技+战术家+计算下注 = 无限过牌+能量</li>
+<li>静默过牌能力强, 牌组可以比铁甲稍大(35张左右)</li>
+<li>蛇之戒提供了极好的开局, 首回合爆发力强</li>
+</ul>
+</div>
+<div class="strat-card">
+<h4>&#x1F91D; 关键Combo</h4>
+<div class="combo-item"><div class="cname">催化 + 致命毒药 + 尸体爆炸</div><div class="cdesc">毒药标准终端。叠几层毒后催化翻倍, 尸体爆炸清场群杀</div></div>
+<div class="combo-item"><div class="cname">杂技 + 战术家 + 计算下注</div><div class="cdesc">弃牌无限。每张弃牌=1能量, 配合清沙(弃牌伤敌)+坚韧绷带(弃牌得甲)</div></div>
+<div class="combo-item"><div class="cname">幽魂形态 + 残影</div><div class="cdesc">无敌组合。幽魂形态使受伤降为1, 残影保留格挡</div></div>
+</div>
+<div class="strat-card">
+<h4>&#x26A1; 升级优先级</h4>
+<p><b>T0:</b> 催化(3→5倍)、致命毒药、幽魂形态</p>
+<p><b>T1:</b> 后空翻、杂技、扫腿、斗篷与匕首</p>
+<p><b>T2:</b> 毒雾、计算下注、足跟勾</p>
+</div>
+</div>
+
+<!-- 机兵 -->
+<div class="char-banner" style="background:linear-gradient(135deg,rgba(100,181,246,0.08),rgba(20,8,40,0.8));margin-top:20px">
+<div class="icon">&#x1F52E;</div>
+<div class="info"><h2 style="color:#64B5F6">机兵</h2><p>初始遗物: 裂变核心(开局2闪电球) | 核心机制: 球体、集中、循环、激发<br>优势: AOE王者、防御稳定、成长性强 | 劣势: 启动慢、怕集中被降</p></div>
+</div>
+<div class="strat-grid">
+<div class="strat-card">
+<h4>&#x1F3AF; 必抓核心牌</h4>
+<div class="tip-box green"><b>集中:</b> 碎片整理、超频、偏差认知、能量护盾</div>
+<div class="tip-box green"><b>球体:</b> 电击、冰川、寒冰、彩虹、混沌、暴风雪</div>
+<div class="tip-box green"><b>运转:</b> 编译驱动、搜索、超频、重启、均衡</div>
+<div class="tip-box green"><b>防御:</b> 冰川、飞跃、蒸汽护壁、缓冲</div>
+<div class="tip-box red"><b>避坑:</b> 偏差认知(不加集中时会降集中)、过度耗能(吃球位)</div>
+</div>
+<div class="strat-card">
+<h4>&#x1F4A1; 玩法思路</h4>
+<ul>
+<li><b>闪电AOE:</b> 电磁场+闪电球 = 每回合群伤, 配合碎片整理叠集中</li>
+<li><b>冰霜龟缩:</b> 冰川+冰霜护符+冰核 = 每回合海量格挡</li>
+<li><b>暗黑蓄力:</b> 养一个超大的暗黑球, 一次激发秒Boss</li>
+<li>集中是机兵的生命线, 碎片整理必抓</li>
+<li>循环牌可以让最右边的球体每回合多次触发</li>
+</ul>
+</div>
+<div class="strat-card">
+<h4>&#x1F91D; 关键Combo</h4>
+<div class="combo-item"><div class="cname">电磁场 + 碎片整理 + 闪电球</div><div class="cdesc">闪电AOE核心。电磁场让闪电打全体, 碎片整理加集中, 配合风暴可一回合打几十AOE</div></div>
+<div class="combo-item"><div class="cname">冰川 + 冰核 + 循环</div><div class="cdesc">冰霜龟缩。每回合海量冰霜球被动+激发, 几乎不掉血</div></div>
+<div class="combo-item"><div class="cname">多重释放 + 暗黑球</div><div class="cdesc">蓄一个大暗黑球然后用多重释放反复激发, 一发秒Boss</div></div>
+</div>
+<div class="strat-card">
+<h4>&#x26A1; 升级优先级</h4>
+<p><b>T0:</b> 碎片整理(集中+1)、电磁场、冰川</p>
+<p><b>T1:</b> 超频、编译驱动、重启、弹幕齐射</p>
+<p><b>T2:</b> 飞跃、寒冰、风暴</p>
+</div>
+</div>
+
+<!-- 观者 -->
+<div class="char-banner" style="background:linear-gradient(135deg,rgba(171,139,255,0.08),rgba(20,8,40,0.8));margin-top:20px">
+<div class="icon">&#x262F;</div>
+<div class="info"><h2 style="color:#AD8BFF">观者</h2><p>初始遗物: 净水(最大能量+1) | 核心机制: 姿态切换、念力、神格<br>优势: 爆发极高、能量充足、上限天花板 | 劣势: 操作复杂、容易暴毙</p></div>
+</div>
+<div class="strat-grid">
+<div class="strat-card">
+<h4>&#x1F3AF; 必抓核心牌</h4>
+<div class="tip-box green"><b>姿态核心:</b> 怒火、警惕、神格、以手抵心、宁静</div>
+<div class="tip-box green"><b>输出:</b> 疾风连击、挥拳、以盾为祭、咬牙切齿</div>
+<div class="tip-box green"><b>防御:</b> 精神壁垒、以手抵心、警惕、保护</div>
+<div class="tip-box green"><b>过牌:</b> 内心平静、先见之明、评估、研习</div>
+<div class="tip-box red"><b>避坑:</b> 过多神格牌(卡手)、不要拿太多高费牌</div>
+</div>
+<div class="strat-card">
+<h4>&#x1F4A1; 玩法思路</h4>
+<ul>
+<li><b>怒火循环:</b> 进怒火→打爆发→转宁静回能→再进怒火</li>
+<li><b>神格一拳:</b> 积累念力→进神格→一拳超人(伤害×3+吸血)</li>
+<li><b>以盾为祭:</b> 把格挡转为伤害, 配合精神壁垒极强</li>
+<li>观者能量充沛但容易暴毙, 优先确保防御</li>
+<li>净水给额外能量, 但前期别抓太多高费牌</li>
+</ul>
+</div>
+<div class="strat-card">
+<h4>&#x1F91D; 关键Combo</h4>
+<div class="combo-item"><div class="cname">怒火 + 疾风连击 + 内心平静</div><div class="cdesc">标准循环。怒火x2伤+疾风多段, 内心平静退宁静回能</div></div>
+<div class="combo-item"><div class="cname">精神壁垒 + 以盾为祭 + 警惕</div><div class="cdesc">攻防一体。切换姿态得甲, 以盾为祭把甲变伤</div></div>
+<div class="combo-item"><div class="cname">神格 + 咬牙切齿 + 以手抵心</div><div class="cdesc">神格爆发。进神格后咬牙切齿×3伤, 以手抵心吸血</div></div>
+</div>
+<div class="strat-card">
+<h4>&#x26A1; 升级优先级</h4>
+<p><b>T0:</b> 怒火(进怒火抽1)、以盾为祭、精神壁垒</p>
+<p><b>T1:</b> 疾风连击、内心平静、咬牙切齿</p>
+<p><b>T2:</b> 警惕、评估、先见之明</p>
+</div>
+</div>
+
+<!-- 储君 -->
+<div class="char-banner" style="background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(20,8,40,0.8));margin-top:20px">
+<div class="icon">&#x2B50;</div>
+<div class="info"><h2 style="color:#FFD700">储君 (隐藏角色)</h2><p>初始遗物: 天赋君权(每战3辉星, 战后回5HP) | 核心机制: 辉星、铸剑、仆从、无色四选一<br>优势: 体系多样、后期极强、可混搭 | 劣势: 上手复杂、前期弱</p></div>
+</div>
+<div class="strat-grid">
+<div class="strat-card">
+<h4>&#x1F3AF; 四大体系</h4>
+<div class="tip-box gold"><b>辉星流:</b> 核心牌: 星爆/新月/超新星/伽马爆破。消耗辉星获得额外效果, 爆发高但资源有限</div>
+<div class="tip-box gold"><b>铸剑流:</b> 核心牌: 淬炼刀刃/君王之剑/征服者。铸剑→锻造王刃→王刃输出, 成长型体系</div>
+<div class="tip-box gold"><b>仆从流:</b> 核心牌: 忠仆/仆从打击/大军。积累仆从→仆从数提供攻防, 后期人海碾压</div>
+<div class="tip-box gold"><b>无色流:</b> 核心: 棱彩之星/王令/洞悉万象。混搭其他职业卡, 上限极高但不稳定</div>
+</div>
+<div class="strat-card">
+<h4>&#x1F4A1; 玩法思路</h4>
+<ul>
+<li>前期主抓一个体系, 不要分散投资</li>
+<li>辉星流爆发最强, 但要注意辉星消耗管理</li>
+<li>铸剑流最稳, 君王之剑0费保留+多段 = 稳定输出</li>
+<li>仆从流前期较弱, 需要先积累仆从数</li>
+<li>无色流适合熟悉游戏后挑战, 上限高但下限低</li>
+<li>天赋君权+战后回血 = 续航优秀, 可走精英路线</li>
+</ul>
+</div>
+</div>
+
+</div></div>
+<div class="content" id="tab-builds">
+<div style="max-width:900px;margin:auto">
+<h2 style="color:#FFD700;font-size:20px;margin:16px 0 10px">流派构建指南</h2>
+<p style="color:#bbb;font-size:13px;margin-bottom:12px">每个流派的核心卡牌、关键遗物、玩法思路和强度评价。</p>
+
+<div class="strat-grid">
+
+<div class="strat-card">
+<h3 style="color:#FF6B6B">力量流 — 铁甲</h3>
+<div class="tip-box"><b>难度:</b> 简单 | <b>强度:</b> S级 | <b>启动速度:</b> 中</div>
+<h4>&#x1F3F7; 核心卡</h4><p>活动肌肉(力量)、突破极限(翻倍)、金刚臂/双持(多段)、观察弱点</p>
+<h4>&#x1F48E; 关键遗物</h4><p>金刚杵、手里剑、赤牛、红骷髅、墨水瓶</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>前期先拿过牌和防御, 中期拿到活动肌肉或突破极限后开始叠力。多段攻击牌是输出终端。注意不要叠力太慢被小怪打死。</p>
+<h4>&#x26A1; 推荐升级</h4><p>活动肌肉 > 金刚臂 > 突破极限</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#4CAF50">毒药流 — 静默</h3>
+<div class="tip-box"><b>难度:</b> 中等 | <b>强度:</b> A级 | <b>启动速度:</b> 慢</div>
+<h4>&#x1F3F7; 核心卡</h4><p>致命毒药、毒雾、催化、尸体爆炸、毒爆</p>
+<h4>&#x1F48E; 关键遗物</h4><p>毒药瓶、样本、毒囊、锈蚀之刃</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>核心是叠毒→催化翻倍→尸体爆炸清场。毒药无视格挡但需要回合数。催化升级后5倍翻倍是关键。注意Boss层毒抗性。</p>
+<p class="highlight">催化是本流派的灵魂, 没遇到催化不要强行走毒药流!</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#64B5F6">闪电AOE流 — 机兵</h3>
+<div class="tip-box"><b>难度:</b> 简单 | <b>强度:</b> S级 | <b>启动速度:</b> 中</div>
+<h4>&#x1F3F7; 核心卡</h4><p>电磁场、碎片整理、风暴、电击、弹幕齐射</p>
+<h4>&#x1F48E; 关键遗物</h4><p>数据盘、核能电池、镀金缆线、冰霜护符</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>碎片整理叠集中, 电磁场让闪电打全体, 风暴一波爆发清场。集中是生命线, 至少2张碎片整理。配合循环每回合大量AOE。</p>
+<p class="blk">小怪战和精英战都是顶级强度, 唯二弱点: 时间吞噬者(反馈)和觉醒者(能力加力)。</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#AD8BFF">怒火循环流 — 观者</h3>
+<div class="tip-box"><b>难度:</b> 高 | <b>强度:</b> S+级 | <b>启动速度:</b> 快</div>
+<h4>&#x1F3F7; 核心卡</h4><p>怒火、警惕(或内心平静)、疾风连击、精神壁垒、以盾为祭</p>
+<h4>&#x1F48E; 关键遗物</h4><p>能量护符、净水、神泪、冰霜护符</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>怒火(伤害x2)→打爆发→转宁静(+3能)→再怒火。循环中配合精神壁垒白嫖格挡, 以盾为祭将格挡转为伤害。</p>
+<p class="highlight">理论上是游戏最强流派, 但操作要求高, 容易在怒火形态中暴毙。务必确保手中有格挡再进怒火。</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#FF9800">弃牌流 — 静默</h3>
+<div class="tip-box"><b>难度:</b> 中等 | <b>强度:</b> A+级 | <b>启动速度:</b> 中快</div>
+<h4>&#x1F3F7; 核心卡</h4><p>杂技、战术家、计算下注、清沙、坚韧绷带、终结技</p>
+<h4>&#x1F48E; 关键遗物</h4><p>清沙、坚韧绷带、蛇之戒、墨水瓶</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>弃牌=过牌+能量+伤害+防御。杂技弃抽3, 战术家让弃牌给能量, 清沙让弃牌打伤害, 绷带给格挡。无限循环的钥匙。</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#9C27B0">冰霜龟缩流 — 机兵</h3>
+<div class="tip-box"><b>难度:</b> 简单 | <b>强度:</b> A级 | <b>启动速度:</b> 慢</div>
+<h4>&#x1F3F7; 核心卡</h4><p>冰川、寒冰、冰霜护符、暴风雪、均衡</p>
+<h4>&#x1F48E; 关键遗物</h4><p>冰核、冰霜护符、数据盘、核能电池</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>冰川和寒冰生成大量冰球→每回合冰球被动给海量格挡→暴风雪把冰球数转为伤害。几乎不掉血, 但打得很慢。</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#FFD700">辉星爆发流 — 储君</h3>
+<div class="tip-box"><b>难度:</b> 中等 | <b>强度:</b> A级 | <b>启动速度:</b> 中</div>
+<h4>&#x1F3F7; 核心卡</h4><p>星爆、新月、超新星、伽马爆破、星之爆发</p>
+<h4>&#x1F48E; 关键遗物</h4><p>辉星罗盘、星辰铸炉、天赋君权</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>积累辉星→消耗辉星触发额外效果。新月的耗2辉星+18伤、伽马爆破的全辉星转AOE都是核心输出。注意不要把辉星用光。</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#4CAF50">消耗流 — 铁甲</h3>
+<div class="tip-box"><b>难度:</b> 中等 | <b>强度:</b> S级 | <b>启动速度:</b> 慢</div>
+<h4>&#x1F3F7; 核心卡</h4><p>腐化、黑暗之拥、坚毅、无惧之痛</p>
+<h4>&#x1F48E; 关键遗物</h4><p>死灵书(消耗给牌)、医疗箱(状态0费消耗)、符文金字塔</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>腐化使所有技能牌0费+消耗, 配合黑暗之拥抽牌=无限。坚毅和无惧之痛提供格挡。启动后每回合可打空牌组。死灵书配合更加恐怖。</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#64B5F6">小刀流 — 静默</h3>
+<div class="tip-box"><b>难度:</b> 简单 | <b>强度:</b> A级 | <b>启动速度:</b> 快</div>
+<h4>&#x1F3F7; 核心卡</h4><p>斗篷与匕首、刀锋风暴、淬毒刃、无限刀锋、小刀回收</p>
+<h4>&#x1F48E; 关键遗物</h4><p>腕刃(0费伤+4)、清沙、苦无、手里剑</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>铺小刀→淬毒刃附加中毒→刀锋风暴AOE+格挡。小刀是0费消耗, 配合腕刃+4伤, 手里剑叠力量, 爆发极快。注意续航问题。</p>
+</div>
+
+<div class="strat-card">
+<h3 style="color:#E040FB">神格一拳流 — 观者</h3>
+<div class="tip-box"><b>难度:</b> 高 | <b>强度:</b> S级 | <b>启动速度:</b> 慢</div>
+<h4>&#x1F3F7; 核心卡</h4><p>神格、咬牙切齿、以手抵心、祈祷、圣洁</p>
+<h4>&#x1F48E; 关键遗物</h4><p>神泪、净水、能量护符</p>
+<h4>&#x1F3AF; 构建思路</h4>
+<p>积累念力(祈祷/圣洁/神泪)→攒够10念力进神格→神格下伤害x3+吸血50%→一拳结束战斗。前期需要苟活攒念力, 爆发后毁天灭地。</p>
+</div>
+
+</div>
+
+<h3 style="color:#E040FB;margin:20px 0 10px">流派强度天梯</h3>
+<div style="background:#120828;border-radius:10px;padding:14px">
+<table class="stance-table">
+<tr><th>梯队</th><th>流派</th><th>角色</th><th>说明</th></tr>
+<tr><td style="color:#FF6B6B"><b>S+</b></td><td>怒火循环流</td><td>观者</td><td>上限天花板, 但操作要求高</td></tr>
+<tr><td style="color:#FF6B6B"><b>S</b></td><td>力量流</td><td>铁甲</td><td>简单粗暴, 稳定通Boss</td></tr>
+<tr><td style="color:#FF6B6B"><b>S</b></td><td>闪电AOE流</td><td>机兵</td><td>小怪精英通吃, 成型即无敌</td></tr>
+<tr><td style="color:#FF6B6B"><b>S</b></td><td>消耗流</td><td>铁甲</td><td>启动后无限循环</td></tr>
+<tr><td style="color:#FF9800"><b>A+</b></td><td>弃牌流</td><td>静默</td><td>无限潜力, 需要关键遗物</td></tr>
+<tr><td style="color:#FF9800"><b>A</b></td><td>毒药流</td><td>静默</td><td>稳但慢, 需要催化</td></tr>
+<tr><td style="color:#FF9800"><b>A</b></td><td>小刀流</td><td>静默</td><td>爆发快, 续航略差</td></tr>
+<tr><td style="color:#FF9800"><b>A</b></td><td>冰霜龟缩</td><td>机兵</td><td>最稳防御, 但输出慢</td></tr>
+<tr><td style="color:#64B5F6"><b>B+</b></td><td>神格一拳</td><td>观者</td><td>秒天秒地, 启动困难</td></tr>
+<tr><td style="color:#64B5F6"><b>B</b></td><td>辉星爆发</td><td>储君</td><td>爆发高但资源有限</td></tr>
+</table>
+</div>
+
+</div></div>
+<div class="content" id="tab-boss">
+<div style="max-width:860px;margin:auto">
+<h2 style="color:#FFD700;font-size:20px;margin:16px 0 10px">Boss攻略</h2>
+<p style="color:#bbb;font-size:13px;margin-bottom:12px">每个Boss的机制分析和应对策略。颜色偏红的Boss更难对付。</p>
+
+<div class="strat-grid">
+
+<div class="strat-card boss-strat">
+<h3>&#x1F99C; 史莱姆王 | 幕1 Boss</h3>
+<p><b>HP:</b> 100 | <b>特性:</b> 半血分裂、召唤史莱姆</p>
+<div class="tip-box red"><b>危险动作:</b> 半血后分裂成多个小史莱姆, 场次数量翻倍</div>
+<p><b>策略:</b> 攒好AOE再打下半血, 分裂后一波AOE全清。建议用旋风斩/燔祭等AOE。也可以直接灌伤害秒掉(在半血前打出足够伤害)。</p>
+<p><b>关键卡:</b> AOE卡、高爆发单体</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1F525; 六火亡魂 | 幕1 Boss</h3>
+<p><b>HP:</b> 100 | <b>特性:</b> 先制4伤+2灼烧、召唤幽灵、半血暴怒</p>
+<div class="tip-box red"><b>危险动作:</b> 先制塞灼烧(抽到自伤3) + 多段攻击(3x8)</div>
+<p><b>策略:</b> 准备消耗灼烧的手段(医疗箱/过牌)。暴怒前攒好格挡, 暴怒后伤害翻倍。幽灵需要AOE清掉。力量不要叠太高, 会被它用。</p>
+<p><b>关键卡:</b> 过牌(快速过掉灼烧)、AOE、稳定格挡</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x26ED; 巨石守卫 | 幕1 Boss</h3>
+<p><b>HP:</b> 90 | <b>特性:</b> 先制30甲、受击+2甲、半血狂暴</p>
+<div class="tip-box"><b>特殊机制:</b> 初始30甲沉睡, 打醒后开始攻击。每受击一次+2甲。</div>
+<p><b>策略:</b> 起手先破30甲(需要高伤单发)。半血前攒好力量和格挡, 半血后它+4力+3荆棘, 伤害很高。易伤对它效果很好。</p>
+<p><b>关键卡:</b> 高伤单发(破甲)、易伤、稳定防御</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1F41D; 毒巢女王 | 幕1 Boss</h3>
+<p><b>HP:</b> 80 | <b>特性:</b> 先制2毒、召唤虫卵、攻击叠毒</p>
+<div class="tip-box green"><b>相对简单:</b> 幕1最弱的Boss, 血少且毒需要叠层</div>
+<p><b>策略:</b> 速攻她。80血不多, 尽快输出。虫卵只有10血容易清掉。有解毒手段更好(药水/人工制品)。</p>
+<p><b>关键卡:</b> 高爆发输出</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1F6E1; 守卫者 | 幕2 Boss</h3>
+<p><b>HP:</b> 160 | <b>特性:</b> 受攻击+8甲、反射25%伤害、召唤甲壳怪、反击4</p>
+<div class="tip-box red"><b>危险动作:</b> 反射伤害+召唤小怪+反伤荆棘, 打它会自伤</div>
+<p><b>策略:</b> 不要无脑多段攻击(每次触发+8甲还反射)。用高伤单发或少段大伤。先清小怪再打本体。中毒/灼烧等DOT效果很好(不触发反射)。</p>
+<p><b>关键卡:</b> DOT(毒/灼烧)、高伤单发、AOE清小怪</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1F6E1; 铜制机械 | 幕2 Boss</h3>
+<p><b>HP:</b> 155 | <b>特性:</b> 受攻击+1力、破盾(有甲受额外伤)、100%吸血</p>
+<div class="tip-box red"><b>极其危险!</b> 100%吸血意味着打不动它就永远打不死。破盾让你不敢叠甲。</div>
+<p><b>策略:</b> 这是幕2最难的Boss之一。核心是爆发够高: 要么叠高力量一回合秒, 要么用毒(无视吸血)。破盾机制意味着格挡反而是累赘, 用铁甲的自残或观者的姿态比较有利。</p>
+<p><b>关键卡:</b> 毒药(无视吸血)、超高爆发、不要依赖格挡</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1FA9E; 镜像统领 | 幕2 Boss</h3>
+<p><b>HP:</b> 130 | <b>特性:</b> 反射15%伤害、召唤镜像碎片、二阶段强化</p>
+<div class="tip-box"><b>机制:</b> 召唤的镜像碎片死亡时给主体+2力。半血进入二阶段(+4力+3荆棘)</div>
+<p><b>策略:</b> 不要先杀碎片(会加主体力量)。直接集火本体。碎片只有18血, AOE扫掉但不刻意杀。二阶段前攒好防御。</p>
+<p><b>关键卡:</b> 单体爆发、AOE(顺带清碎片)</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1F47E; 觉醒者 | 幕3 Boss</h3>
+<p><b>HP:</b> 220 | <b>特性:</b> 能力牌+1力、召唤邪教徒、半血二阶段(+6力+6荆棘)</p>
+<div class="tip-box red"><b>能力牌杀手!</b> 每打一张能力牌它+1力, 机兵/观者非常头疼</div>
+<p><b>策略:</b> 限制能力牌使用! 打它之前不要拿太多能力牌。铁甲战士最克制它(能力牌少)。二阶段非常狂暴(+6力), 尽量在半血前压低血量, 二阶段一波爆发带走。毒药流也很有效。</p>
+<p><b>关键卡:</b> 少用能力、毒药、爆发输出</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x23F0; 时间吞噬者 | 幕3 Boss</h3>
+<p><b>HP:</b> 210 | <b>特性:</b> 先制12伤+3易、反击5、反馈(按出牌数伤)</p>
+<div class="tip-box red"><b>小牌组杀手!</b> 反馈机制按你出牌数量伤, 弃牌流/小刀流很伤</div>
+<p><b>策略:</b> 先制易伤+伤害很疼, 开局就要叠甲或免易伤(生姜)。反击5意味着每次打它自伤5, 多段攻击非常亏。反馈每张牌伤20, 少出牌多过牌, 用大牌高效输出。毒药流依然稳定。</p>
+<p><b>关键卡:</b> 高费高效牌、毒药、生姜(免易伤)</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1F480; 亡灵君主 | 幕3 Boss</h3>
+<p><b>HP:</b> 140 | <b>特性:</b> 每回合召唤亡灵仆从(8血)</p>
+<div class="tip-box green"><b>相对简单:</b> 不需要杀小怪, 直接杀本体就赢。有AOE会轻松很多。</div>
+<p><b>策略:</b> 直接集火本体! 140血在幕3不算多。小怪只有8血, AOE顺手清掉, 不清也没事(杀本体就赢)。</p>
+<p><b>关键卡:</b> 单体爆发、AOE</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x1F5E1; 血狂 | 幕3 Boss</h3>
+<p><b>HP:</b> 100 | <b>特性:</b> 先制3力、出牌即反伤、每回合+2力、半血二阶段</p>
+<div class="tip-box red"><b>极致进攻!</b> 血狂没有防御动作、没有召唤、没有回复 — 全是攻击和加力量。打攻击牌它反5伤，打技能牌它反3伤，每回合还+2力。</div>
+<p><b>策略:</b> 这是纯粹的DPS检测Boss。速战速决! 不要带太多低费小牌(每张触发反伤)。用高费高效的大牌打出爆发。能力牌不会触发反伤(它只反攻击和技能)，可以放心使用。力量叠好后一波爆发带走。拖到第4回合后每下攻击都能到30+伤害。</p>
+<p><b>关键卡:</b> 高费高效牌、能力牌(安全)、爆发COMBO、易伤</p>
+</div>
+
+<div class="strat-card boss-strat">
+<h3>&#x26A0; 熵变体 | 幕3 Boss</h3>
+<p><b>HP:</b> 170 | <b>特性:</b> 先制塞伤口、吸血6%、半血狂暴、攻击塞伤口</p>
+<div class="tip-box red"><b>消耗战!</b> 不断塞伤口压缩牌组, 还会吸血, 拖越久越不利</div>
+<p><b>策略:</b> 需要处理伤口的手段(医疗箱/过牌)。尽快输出, 拖久了牌组全是伤口就打不了。半血后非常狂暴。高爆发一波带走最好。</p>
+<p><b>关键卡:</b> 医疗箱(让伤口0费消耗)、高爆发、过牌</p>
+</div>
+
+</div>
+</div></div>
+<div class="content" id="tab-cards">
+<h2 style="color:#FFD700;margin:8px 0">卡牌图鉴</h2>
+<div class="search-bar">
+  <input type="text" id="cardSearch" placeholder="搜索卡牌名称/效果..." oninput="filterCards()">
+  <select id="cardType" onchange="filterCards()"><option value="">全部类型</option><option value="attack">攻击</option><option value="skill">技能</option><option value="power">能力</option></select>
+  <select id="cardRarity" onchange="filterCards()"><option value="">全部稀有度</option><option value="basic">基础</option><option value="common">普通</option><option value="uncommon">罕见</option><option value="rare">稀有</option></select>
+</div>
+<div class="filter-bar" id="charFilter">
+  <button class="filter-btn active" data-char="" onclick="setCharFilter(this,'')">全部</button>
+  <button class="filter-btn" data-char="ironclad" onclick="setCharFilter(this,'ironclad')">&#x1F525;铁甲</button>
+  <button class="filter-btn" data-char="silent" onclick="setCharFilter(this,'silent')">&#x1F5E1;静默</button>
+  <button class="filter-btn" data-char="defect" onclick="setCharFilter(this,'defect')">&#x1F52E;机兵</button>
+  <button class="filter-btn" data-char="watcher" onclick="setCharFilter(this,'watcher')">&#x262F;观者</button>
+  <button class="filter-btn" data-char="regent" onclick="setCharFilter(this,'regent')">&#x2B50;储君</button>
+  <button class="filter-btn" data-char="neutral" onclick="setCharFilter(this,'neutral')">无色</button>
+</div>
+<p class="count">共 <b id="cardCount">0</b> 张</p>
+<div class="card-grid" id="cardGrid"></div>
+</div>
+<div class="content" id="tab-relics">
+<h2 style="color:#FFD700;margin:8px 0">遗物图鉴</h2>
+<div class="search-bar"><input type="text" id="relicSearch" placeholder="搜索遗物..." oninput="filterRelics()"></div>
+<p class="count">共 <b id="relicCount">0</b> 件</p>
+<div class="card-grid" id="relicGrid"></div>
+</div>
+<div class="content" id="tab-enemies">
+<h2 style="color:#FFD700;margin:8px 0">敌人图鉴</h2>
+<div class="search-bar">
+  <input type="text" id="enemySearch" placeholder="搜索敌人..." oninput="filterEnemies()">
+  <select id="enemyAct" onchange="filterEnemies()"><option value="">全部幕</option><option value="1">幕1</option><option value="2">幕2</option><option value="3">幕3</option></select>
+  <select id="enemyType" onchange="filterEnemies()"><option value="">全部类型</option><option value="normal">普通</option><option value="elite">精英</option><option value="boss">Boss</option></select>
+</div>
+<p class="count">共 <b id="enemyCount">0</b> 个</p>
+<div class="card-grid" id="enemyGrid"></div>
+</div>
+<div class="content" id="tab-potions">
+<h2 style="color:#FFD700;margin:8px 0">药水大全</h2>
+<div class="search-bar"><input type="text" id="potionSearch" placeholder="搜索药水..." oninput="filterPotions()"></div>
+<p class="count">共 <b id="potionCount">0</b> 种</p>
+<div class="card-grid" id="potionGrid"></div>
+</div>
+<div class="content" id="tab-events">
+<h2 style="color:#FFD700;margin:8px 0">随机事件</h2>
+<div class="search-bar"><input type="text" id="eventSearch" placeholder="搜索事件..." oninput="filterEvents()"></div>
+<p class="count">共 <b id="eventCount">0</b> 个</p>
+<div class="card-grid" id="eventGrid"></div>
+</div>
+<div class="content" id="tab-mechanics">
+<h2 style="color:#FFD700;margin:8px 0">机制数据</h2>
+<div class="mech-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
+
+<div class="strat-card"><h3>&#x2694;&#xFE0F; 伤害公式</h3>
+<div class="tip-box">d = (base + strength x 1.5/hitCnt)</div>
+<ul><li>力量: 每点+1.5伤害(多段分摊)</li><li>虚弱: d x 0.75</li><li>怒火姿态: x2</li><li>神格姿态: x(divineWrath)</li><li>上限: x8(神格+神威x12)</li><li>易伤: 独立 x1.5(手钻x2)</li><li>血怒玺戒: x1.5</li></ul></div>
+
+<div class="strat-card"><h3>&#x1F52E; 球体系统</h3>
+<p>集中阈值: <span class="highlight">12</span>(超12后半效)</p>
+<table class="stance-table"><tr><th>类型</th><th>被动</th><th>激发</th></tr>
+<tr><td style="color:#FFD700">&#x26A1;闪电</td><td>7+eff伤</td><td>18+effx2伤</td></tr>
+<tr><td style="color:#64B5F6">&#x2744;冰霜</td><td>6+eff甲</td><td>12+eff甲</td></tr>
+<tr><td style="color:#9C27B0">&#x1F311;暗黑</td><td>蓄15+eff</td><td>释放全体</td></tr>
+<tr><td style="color:#AD8BFF">&#x26A1;等离子</td><td>+3能</td><td>+4能</td></tr>
+</table></div>
+
+<div class="strat-card"><h3>&#x262F; 姿态系统</h3>
+<table class="stance-table"><tr><th>姿态</th><th>效果</th></tr>
+<tr><td style="color:#FF6B6B">&#x1F525;怒火</td><td>伤害x2, 受伤x1.5</td></tr>
+<tr><td style="color:#64B5F6">&#x1F4A7;宁静</td><td>退出时+3(+1)能量</td></tr>
+<tr><td style="color:#FFD700">&#x2728;神格</td><td>伤害x(divineWrath), 吸血50%</td></tr>
+</table>
+<p style="margin-top:6px">精神壁垒: 切换得甲 | 风暴: 切换AOE | 阴阳: 切换抽牌+甲</p></div>
+
+<div class="strat-card"><h3>&#x1F4AA; Buff/Debuff</h3>
+<table class="stance-table"><tr><th>效果</th><th>说明</th></tr>
+<tr><td style="color:#FF6B6B">力量</td><td>每点+1.5伤</td></tr>
+<tr><td style="color:#64B5F6">敏捷</td><td>每点+1.5甲</td></tr>
+<tr><td style="color:#AD8BFF">集中</td><td>每点+1球体效果</td></tr>
+<tr><td style="color:#9C27B0">金属化</td><td>每回+金属化数甲</td></tr>
+<tr><td style="color:#4CAF50">荆棘</td><td>受伤反弹</td></tr>
+<tr><td style="color:#E040FB">缓冲</td><td>抵挡伤害</td></tr>
+<tr><td style="color:#FF9800">易伤</td><td>受伤+50%(手钻+100%)</td></tr>
+<tr><td style="color:#64B5F6">虚弱</td><td>伤害-25%(纸鹤-50%)</td></tr>
+<tr><td style="color:#4CAF50">中毒</td><td>每回毒伤, 上限99</td></tr>
+</table></div>
+
+<div class="strat-card"><h3>&#x1F3F7; 敌人公式</h3>
+<div class="tip-box">hp = (hb + floor x hs x hpBase) x diffHp</div>
+<div class="tip-box">dmg = (base + floor x dScale) x diffDmg</div>
+<ul><li>hpBase = 1.0 + act x 0.45</li><li>dScale: 幕1=0.60, 幕2=0.80, 幕3=1.00</li><li>bScale: 幕1=0.30, 幕2=0.40, 幕3=0.50</li><li>diffHp = 1 + diff x 0.30</li><li>diffDmg = 1 + diff x 0.35</li></ul></div>
+
+<div class="strat-card"><h3>&#x1F3B2; 稀有度权重</h3>
+<table class="stance-table"><tr><th>幕</th><th>稀有</th><th>罕见</th></tr>
+<tr><td>幕1</td><td>x0.30</td><td>x0.80</td></tr>
+<tr><td>幕2</td><td>x0.55</td><td>x1.00</td></tr>
+<tr><td>幕3</td><td>x1.00</td><td>x1.00</td></tr></table>
+<p>初始抽牌: 5张(困难/噩梦-1, 蛇戒+2)</p></div>
+
+<div class="strat-card"><h3>&#x1F504; 回合流程</h3>
+<ol style="padding-left:18px;font-size:12.5px;color:#bbb;line-height:1.8">
+<li>能量恢复(冰淇淋保留)、格挡重置</li>
+<li>Buff衰减: 虚弱/易伤-1(萝卜/生姜免疫)</li>
+<li>触发: 金属化、恶魔形态、毒雾、球体被动</li>
+<li>抽牌: 计算张数后抽牌</li>
+<li>出牌: 自由出牌阶段</li>
+<li>结束: 弃牌、触发遗物</li>
+<li>敌人回合: 执行意图</li>
+</ol></div>
+
+<div class="strat-card"><h3>&#x2B50; 储君体系</h3>
+<p><span class="highlight">辉星:</span> 消耗辉星获得爆发效果</p>
+<p><span class="highlight">铸剑:</span> 积累铸剑锻造君王之剑(0费保留, 铸剑x6/10伤)</p>
+<p><span class="highlight">仆从:</span> 积累仆从数提供攻防加成</p>
+<p><span class="highlight">无色流:</span> 混搭其他职业卡, 跨体系组合</p></div>
+
+<div class="strat-card"><h3>&#x1F30A; 潮汐系统</h3>
+<p>Lv 0-10, 三种相位轮换</p>
+<ul><li>相位0(涌): Lv伤害/甲</li><li>相位1(回): Lv/2+抽1+1能</li><li>相位2(怒): Lv+3+Lvx3甲</li></ul>
+<p>回响: Lv3首技-1费 | Lv6首攻+3 | Lv9回始抽1</p></div>
+
+<div class="strat-card"><h3>&#x1F4A0; 特殊状态</h3>
+<table class="stance-table"><tr><th>牌</th><th>效果</th></tr>
+<tr><td>伤口</td><td>占据手牌无法打出</td></tr>
+<tr><td>晕眩</td><td>占据手牌无法打出</td></tr>
+<tr><td>灼烧</td><td>抽到自伤3;消耗</td></tr>
+<tr><td>小刀</td><td>0费6/9伤;消耗</td></tr>
+<tr><td>重击</td><td>0费14伤;消耗</td></tr>
+<tr><td>护盾</td><td>0费14甲;消耗</td></tr>
+</table></div>
+
+</div>
+</div>
+
+<script>
+const DATA = {"cards":[{"id":"strike","name":"打击","c":"1","type":"attack","rarity":"basic","target":"enemy","desc":"造成6点伤害","uDesc":"造成9点伤害+1层易伤","_char":"neutral"},{"id":"defend","name":"防御","c":"1","type":"skill","rarity":"basic","target":"self","desc":"获得5+敏捷点格挡","uDesc":"获得8+敏捷点格挡","_char":"neutral"},{"id":"bash","name":"重击","c":"2","type":"attack","rarity":"basic","target":"enemy","desc":"造成8点伤害+2层易伤+获得4格挡","uDesc":"造成10点伤害+3层易伤+获得6格挡","_char":"ironclad"},{"id":"precisionStrike","name":"精准打击","c":"-1","type":"attack","rarity":"common","target":"enemy","desc":"X费:6伤xX+抽1张","uDesc":"X费:9伤xX+抽2张","_char":"neutral"},{"id":"twinStrike","name":"双斩","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"7点伤害x2","uDesc":"10点伤害x2+1层易伤+1敏捷","_char":"ironclad"},{"id":"pommelStrike","name":"剑柄打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6伤;敌每10甲+3伤;破甲+抽1","uDesc":"9伤;敌每8甲+3伤;破甲+抽2","_char":"neutral"},{"id":"cleave","name":"旋风斩","c":"1","type":"attack","rarity":"common","target":"all","desc":"全8伤+1易伤","uDesc":"11伤+2易伤","_char":"neutral"},{"id":"headbutt","name":"头槌","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"12点伤害,弃牌回抽牌堆","uDesc":"16点伤害,弃牌回抽牌堆","_char":"neutral"},{"id":"wildStrike","name":"狂野打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"14伤+1伤口+1敏捷","uDesc":"18伤+1伤口+全敌4伤+2敏+抽1","_char":"neutral"},{"id":"uppercut","name":"上勾拳","c":"2","type":"attack","rarity":"common","target":"enemy","desc":"14伤+2易伤;敌本回下张牌+1费","uDesc":"18伤+3易伤;敌本回下张牌+2费","_char":"neutral"},{"id":"ironWave","name":"铁斩波","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6伤+6甲;本回每用1次+2/+2","uDesc":"9伤+9甲;本回每用1次+3/+3","_char":"ironclad"},{"id":"clash","name":"冲突","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"15点伤害;手牌技能>=3不可用","uDesc":"20点伤害;抽1张牌","_char":"ironclad"},{"id":"thunderclap","name":"雷霆","c":"1","type":"attack","rarity":"common","target":"all","desc":"对所有敌人造成4点伤害+1层易伤","uDesc":"对所有敌人造成6点伤害+1层易伤+1层虚弱","_char":"neutral"},{"id":"bodySlam","name":"摔绊","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"伤害=当前格挡","uDesc":"伤害=格挡x1.5+返还1/3","_char":"neutral"},{"id":"shrug","name":"耸肩无视","c":"1","type":"skill","rarity":"common","target":"self","desc":"8甲;手牌≤3→+6甲+抽1","uDesc":"11甲;手牌≤4→+8甲+抽2","_char":"neutral"},{"id":"sentinel","name":"哨卫","c":"1","type":"skill","rarity":"common","target":"self","desc":"获得12格挡;获得1点能量+抽1","uDesc":"获得16格挡;获得1点能量+抽1","_char":"neutral"},{"id":"battleTrance","name":"战斗专注","c":"0","type":"skill","rarity":"common","target":"self","desc":"抽2张牌;消耗","uDesc":"抽3张牌;消耗","_char":"neutral"},{"id":"trueGrit","name":"坚毅","c":"1","type":"skill","rarity":"common","target":"self","desc":"12点格挡消耗","uDesc":"16点格挡+抽1+1甲消耗","_char":"neutral"},{"id":"armaments","name":"武装","c":"1","type":"skill","rarity":"common","target":"self","desc":"获得11格挡;永久+1点力量(跨战斗)","uDesc":"获得15格挡;永久+1点力量(跨战斗)","_char":"neutral"},{"id":"swordBoomerang","name":"剑刃回旋","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"4点伤害x3","uDesc":"4点伤害x4+1敏捷","_char":"neutral"},{"id":"recklessCharge","name":"鲁莽","c":"0","type":"attack","rarity":"uncommon","target":"enemy","desc":"11点伤害+1晕眩","uDesc":"14点伤害+1晕眩+1点能量","_char":"neutral"},{"id":"dropkick","name":"飞踢","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"7点伤害;若易伤回复1点能量抽1张牌","uDesc":"10点伤害;若易伤回复1点能量抽1张牌","_char":"neutral"},{"id":"hemokinesis","name":"血祭","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"15点伤害;对自己造成3点伤害+3点格挡","uDesc":"20点伤害;对自己造成3点伤害+3点格挡+回复2点","_char":"neutral"},{"id":"perfectedStrike","name":"完美打击","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"6+每打击+3伤","uDesc":"10+每打击+3+每3打击回1能","_char":"neutral"},{"id":"pummel","name":"连打","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"5伤x3+2甲;消耗","uDesc":"7伤x3+1力+4甲;消耗","_char":"neutral"},{"id":"whirlwind","name":"暴风","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"对所有敌人造成13点伤害","uDesc":"对所有敌人造成17点伤害+1弱","_char":"neutral"},{"id":"immolate","name":"圣火","c":"2","type":"attack","rarity":"rare","target":"all","desc":"对所有敌人造成18点伤害;将1张灼烧加入弃牌堆","uDesc":"对所有敌人造成24点","_char":"neutral"},{"id":"severSoul","name":"灵魂分离","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"22点伤害;消耗非攻击","uDesc":"26点伤害+消耗每张+3点格挡+抽1","_char":"neutral"},{"id":"fiendFire","name":"魔火","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"每消耗1张手牌造成7点伤害","uDesc":"每消耗1张牌造成8点伤害并抽1张牌","_char":"neutral"},{"id":"flameBarrier","name":"火焰障壁","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"12点格挡+反4点伤害","uDesc":"16点格挡+反6+全体易伤","_char":"neutral"},{"id":"ghostlyArmor","name":"幽魂甲","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"10甲;本回受伤→攻击者+1弱","uDesc":"14甲;本回受伤→攻击者+2弱","_char":"neutral"},{"id":"seeingRed","name":"怒火","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"获得1点能量;消耗","uDesc":"获得2点能量;消耗","_char":"neutral"},{"id":"bloodletting","name":"放血","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"获得2点能量;对自己造成3点伤害","uDesc":"获得3点能量;对自己造成3点伤害","_char":"neutral"},{"id":"spotWeakness","name":"识破","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获得1点力量+3点格挡","uDesc":"获得2点力量+5点格挡","_char":"neutral"},{"id":"offering","name":"奉献","c":"0","type":"skill","rarity":"rare","target":"self","desc":"对自己造成5点伤害;+2点能量;抽2张牌;消耗","uDesc":"对自己造成4点伤害;+2能量;抽3张牌;消耗","_char":"neutral"},{"id":"limitBreak","name":"突破极限","c":"1","type":"skill","rarity":"rare","target":"self","desc":"力量+50%;消耗1手牌","uDesc":"力量+75%+回6;消耗1手牌","_char":"neutral"},{"id":"metallicize","name":"金属化","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合8点格挡;获得5点格挡","uDesc":"能力:回合12点格挡+3刺;获得8","_char":"neutral"},{"id":"feelNoPain","name":"无惧疼痛","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:消耗得3点格挡;获得4","uDesc":"能力:消耗得5+回复1点能量;获得6","_char":"neutral"},{"id":"barricade","name":"壁垒","c":"2","type":"power","rarity":"rare","target":"self","desc":"能力:格挡不清零;获得8点格挡","uDesc":"能力:挡不清零+获得12","_char":"neutral"},{"id":"inflame","name":"燃烧","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:+1点力量+获得6点格挡","uDesc":"能力:+2点力量+回复4点+获得8","_char":"neutral"},{"id":"demonForm","name":"恶魔形态","c":"3","type":"power","rarity":"rare","target":"self","desc":"能力:回合+2力量;获得4格挡","uDesc":"能力:回合+3力量;获得6格挡+1力量","_char":"neutral"},{"id":"darkEmbrace","name":"黑暗之拥","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:消耗抽1张牌;获得抽1张牌+3点格挡+回复1点能量","uDesc":"能力:消耗抽2张牌+获得抽2张牌+8点格挡+回复2点能量","_char":"neutral"},{"id":"evolve","name":"进化","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:状态多抽2张牌;获得抽1张牌+3点格挡","uDesc":"能力:状态多抽3张牌+获得抽2张牌+6点格挡","_char":"neutral"},{"id":"corruption","name":"腐化","c":"2","type":"power","rarity":"rare","target":"self","desc":"能力:技能0费+消耗+获得6点格挡","uDesc":"能力:技能0费+消耗+回复5点+2点力量+10点格挡","_char":"neutral"},{"id":"impervious","name":"岿然不动","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"获得22格挡;消耗","uDesc":"获得28格挡;消耗","_char":"neutral"},{"id":"reaper","name":"死神","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"对所有敌人造成5点伤害;回复等量生命值","uDesc":"对所有敌人造成8点伤害;回复等量生命值","_char":"neutral"},{"id":"exhume","name":"发掘","c":"1","type":"skill","rarity":"rare","target":"self","desc":"从消耗堆回收1张牌","uDesc":"回收2张","_char":"neutral"},{"id":"doubleTap","name":"双重击","c":"1","type":"skill","rarity":"rare","target":"self","desc":"下张攻击牌打出打击2次;消耗","uDesc":"下张攻击打出打击2次;返1点能量","_char":"neutral"},{"id":"feed","name":"盛宴","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"10点伤害;击杀+4血上限","uDesc":"14点伤害;击杀+4血上限","_char":"neutral"},{"id":"entrench","name":"堑壕","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"将当前格挡翻倍","uDesc":"将当前格挡变为2.5倍","_char":"neutral"},{"id":"burningPact","name":"燃契","c":"1","type":"skill","rarity":"rare","target":"self","desc":"抽3张牌;消耗","uDesc":"抽4张牌;消耗","_char":"neutral"},{"id":"bludgeon","name":"重锤","c":"3","type":"attack","rarity":"uncommon","target":"enemy","desc":"34点伤害+2易伤","uDesc":"44点伤害+3易伤","_char":"neutral"},{"id":"rampage","name":"狂怒","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"9点伤害;每打一次+6(本场)","uDesc":"13点伤害;每打一次+6","_char":"neutral"},{"id":"heavyBlade","name":"厚重之刃","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"造成14点伤害+力量加成","uDesc":"造成18点伤害+力量加成","_char":"neutral"},{"id":"flex","name":"活动肌肉","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"获得4点力量;回合末失去等量力量+抽1","uDesc":"获得6点力量;回合末失去等量力量+抽2","_char":"neutral"},{"id":"rupture","name":"撕裂","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:自残得1点力量+抽1张牌;获得6点格挡","uDesc":"能力:自残得2点力量+抽2张牌+回能;获得9","_char":"neutral"},{"id":"fireBreathing","name":"火焰吐息","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:抽到状态全14伤;获得8格挡","uDesc":"能力:抽到状态全18伤+敌易+弱;获12甲","_char":"neutral"},{"id":"carnage","name":"残杀","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"18伤;本场每杀1敌+5伤(消耗)","uDesc":"26伤;本场每杀1敌+7伤(消耗)","_char":"neutral"},{"id":"fervor","name":"热血沸腾","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每回合合+1点力量;对自己造成1点伤害","uDesc":"能力:每回合合+1点力量;对自己造成1点伤害+获得5点格挡","_char":"neutral"},{"id":"crush","name":"碾碎","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"造成15点伤害;每有1点力量+2点伤害","uDesc":"造成20点伤害;每有1点力量+2点伤害","_char":"neutral"},{"id":"battleFury","name":"战意爆发","c":"-1","type":"power","rarity":"rare","target":"self","desc":"消耗X点能量获得X力量+X*3点格挡","uDesc":"消耗X点能量获得X+1点力量+X*4点格挡","_char":"neutral"},{"id":"coldSnap","name":"寒冰","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6伤+1冰+抽1;冻结敌-3力","uDesc":"9伤+1冰+抽1;冻结敌-5力","_char":"defect"},{"id":"sweepingBeam","name":"扫射光束","c":"1","type":"attack","rarity":"common","target":"all","desc":"对所有敌人造成8点伤害+抽1","uDesc":"全12点伤害+抽1+多敌回能","_char":"defect"},{"id":"rebound","name":"弹回","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"13伤+回顶+抽1","uDesc":"18伤+回顶+抽1+敌虚弱","_char":"defect"},{"id":"recycle","name":"回收","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗1手牌;获等量能+1","uDesc":"消耗1手牌;获等量能+2+抽2","_char":"defect"},{"id":"focusShield","name":"聚焦护盾","c":"1","type":"skill","rarity":"common","target":"self","desc":"每个球体获得4格挡","uDesc":"每个球体获得6格挡","_char":"neutral"},{"id":"superconduct","name":"超导","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"激发首个球体并获得额外效果","uDesc":"激发首个球体并获得更强效果","_char":"neutral"},{"id":"beamCell","name":"光束细胞","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"4点伤害;+1层易伤","uDesc":"7点伤害;+2层易伤","_char":"defect"},{"id":"barrage","name":"弹幕齐射","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"每球10点伤害","uDesc":"每球14点伤害+生1等离子+1集中+生1电","_char":"defect"},{"id":"compileDriver","name":"编译驱动","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"8点伤害;每有1种球体抽1张牌","uDesc":"12点伤害;每有1种球体抽1张牌","_char":"defect"},{"id":"autoShields","name":"自动护盾","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获得13点格挡(无盾时)","uDesc":"获得18点格挡(无盾时)","_char":"defect"},{"id":"allForOne","name":"一为全","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"12点伤害;回收弃牌堆所有0费牌","uDesc":"16点伤害;回收弃牌堆所有0费牌","_char":"neutral"},{"id":"hyperbeam","name":"超光束","c":"2","type":"attack","rarity":"rare","target":"all","desc":"对所有敌人造成26点伤害;集中降低3点","uDesc":"对所有敌人造成34点伤害;集中降低2点","_char":"defect"},{"id":"selfRepair","name":"自我修复","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"战末回复7点血;获得5点格挡","uDesc":"战末回复10点血;获得8点格挡","_char":"defect"},{"id":"loop","name":"循环","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"球体额外触发打击1次;获得抽1张牌","uDesc":"额外触发2+获得抽1张牌+3点格挡","_char":"defect"},{"id":"rainbow","name":"彩虹","c":"2","type":"skill","rarity":"rare","target":"self","desc":"生成闪电/冰霜/暗黑球各1+1集中","uDesc":"0费+2集中","_char":"defect"},{"id":"leap","name":"跳跃","c":"1","type":"skill","rarity":"common","target":"self","desc":"8甲;战首抽到+4甲+抽1","uDesc":"12甲;战首抽到+6甲+抽1","_char":"defect"},{"id":"steamBarrier","name":"蒸汽护壁","c":"1","type":"skill","rarity":"common","target":"self","desc":"10甲+2蒸汽;蒸汽=每层-1伤害","uDesc":"14甲+3蒸汽;蒸汽=每层-2伤害","_char":"defect"},{"id":"recursion","name":"递归","c":"1","type":"skill","rarity":"common","target":"self","desc":"激发首个球体并生成相同球体","uDesc":"零费","_char":"defect"},{"id":"claw","name":"爪击","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"8伤;本场每用爪击+5;回合首张爪击额外+4","uDesc":"11伤;每用+5;首张额外+5","_char":"defect"},{"id":"goForTheEyes","name":"瞄准眼睛","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"5点伤害;有球体则+1层虚弱","uDesc":"7点伤害;有球体则+2层虚弱","_char":"neutral"},{"id":"streamline","name":"精简","c":"2","type":"attack","rarity":"common","target":"enemy","desc":"20点伤害;此后每用打击1次永久费用降低1点","uDesc":"26点伤害;此后每用打击1次费用降低1点","_char":"neutral"},{"id":"melter","name":"熔毁","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"12点伤害;移除敌人所有格挡","uDesc":"16点伤害;移除敌人所有格挡","_char":"defect"},{"id":"doomAndGloom","name":"末日","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"对所有敌人造成10点伤害;生成1暗黑球+4甲","uDesc":"对所有敌人造成14点伤害;生成1暗黑球+6甲","_char":"defect"},{"id":"chaos","name":"混沌","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"生成1随机球+3甲","uDesc":"生成2随机球+6甲","_char":"defect"},{"id":"spiritShield","name":"精神护盾","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"每张手牌获得4格挡","uDesc":"每张手牌获得5格挡","_char":"watcher"},{"id":"reinfBody","name":"强化身躯","c":"-1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗X点能量X*8格挡","uDesc":"消耗X点能量X*10格挡","_char":"neutral"},{"id":"ironWhirl","name":"铁旋风","c":"1","type":"attack","rarity":"common","target":"all","desc":"7全体;每敌+1伤+1甲","uDesc":"10全体;每敌+2伤+2甲","_char":"neutral"},{"id":"battleSpirit","name":"战意","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获得2点力量;消耗","uDesc":"获得3点力量;消耗","_char":"neutral"},{"id":"seek","name":"寻找","c":"1","type":"skill","rarity":"rare","target":"self","desc":"从抽牌堆选择1张牌获得牌;消耗","uDesc":"从抽牌堆选择2张牌获得牌;消耗","_char":"defect"},{"id":"zap","name":"电击","c":"1","type":"skill","rarity":"basic","target":"self","desc":"生成1闪电球;获得2点格挡","uDesc":"生成1闪电球;获得4点格挡","_char":"neutral"},{"id":"dualcast","name":"双重释放","c":"1","type":"skill","rarity":"basic","target":"self","desc":"激发首个球体打击2次","uDesc":"激发首个球体打击2次;生成1闪电球","_char":"defect"},{"id":"ballLightning","name":"球形闪电","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"7伤(弹射)+1电+抽1","uDesc":"10伤(弹射)+1电+抽1","_char":"defect"},{"id":"coolheaded","name":"冷静头脑","c":"1","type":"skill","rarity":"common","target":"self","desc":"6点格挡;生成1冰霜球","uDesc":"9点格挡;生成1冰霜球","_char":"neutral"},{"id":"glacier","name":"冰川","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"10点格挡;生成2冰霜球+1集中","uDesc":"14点格挡;生成2冰霜球+2集中","_char":"defect"},{"id":"capacitor","name":"电容器","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"球位+2+集中+1;获得6点格挡","uDesc":"球位+4+集中+2+获得8","_char":"defect"},{"id":"defragment","name":"碎片整理","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"集中+2;获得6点格挡","uDesc":"集中+3+获得8点格挡","_char":"defect"},{"id":"tempest","name":"暴风","c":"-1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗X点能量生成X球(闪电+冰霜交替);每球+2甲","uDesc":"消耗X点能量生成X+1球(闪电+冰霜交替);每球+3甲","_char":"defect"},{"id":"electrodynamics","name":"电动力学","c":"1","type":"power","rarity":"rare","target":"self","desc":"闪电球攻击全体;虚无","uDesc":"闪电球攻击全体+获得5点格挡;虚无","_char":"defect"},{"id":"echoForm","name":"回响形态","c":"2","type":"power","rarity":"rare","target":"self","desc":"首张牌打出打击2次","uDesc":"首张牌打出打击2次(1费)","_char":"neutral"},{"id":"buffer","name":"缓冲","c":"1","type":"power","rarity":"rare","target":"self","desc":"抵挡打击2次伤害","uDesc":"抵挡打击3次伤害","_char":"defect"},{"id":"staticDischarge","name":"静电释放","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"受伤生1电球","uDesc":"受伤生1电球+2点格挡+生1","_char":"defect"},{"id":"thunderStrike","name":"雷霆打击","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"10点伤害;每闪电球+4点伤害+生1电","uDesc":"14点伤害;每闪电球+5点伤害+生2电","_char":"neutral"},{"id":"geneticAlgorithm","name":"遗传算法","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获得1格挡;永久+4格挡(跨战斗累计)","uDesc":"获得1格挡;永久+6格挡(跨战斗累计)","_char":"defect"},{"id":"skim","name":"浏览","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"抽3张牌","uDesc":"抽4张牌","_char":"neutral"},{"id":"whiteNoise","name":"白噪音","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获得1张随机能力牌;消耗","uDesc":"获得2张随机能力牌;消耗","_char":"defect"},{"id":"heatsinks","name":"散热片","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每3点能量力抽1张牌;获得抽1张牌","uDesc":"能力:每能力抽1张牌+获得抽2张牌","_char":"neutral"},{"id":"storm","name":"风暴","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每3点能量力生1电;获得生1","uDesc":"能力:每能力生1+抽1张牌","_char":"defect"},{"id":"consume","name":"消耗","c":"2","type":"power","rarity":"uncommon","target":"self","desc":"集中+2;球位-1","uDesc":"集中+3+获得4;球位-1","_char":"defect"},{"id":"bootSequence","name":"启动序列","c":"0","type":"power","rarity":"uncommon","target":"self","desc":"10点格挡+抽1;固有","uDesc":"14点格挡+抽2;固有","_char":"defect"},{"id":"orbSurge","name":"球体奔涌","c":"-1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗X点能量生成X个随机球","uDesc":"消耗X点能量生成X+1个随机球","_char":"neutral"},{"id":"overclock","name":"超频","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"抽2张牌;获得2张伤口;消耗","uDesc":"抽3张牌;获得2张伤口;消耗","_char":"defect"},{"id":"stack","name":"叠加","c":"1","type":"skill","rarity":"common","target":"self","desc":"获得等于弃牌堆牌数的格挡","uDesc":"获得等于弃牌堆牌数+3的格挡","_char":"defect"},{"id":"repulse","name":"排斥","c":"2","type":"attack","rarity":"common","target":"all","desc":"12全体+敌本回伤-3","uDesc":"16全体+敌本回伤-5","_char":"neutral"},{"id":"multiCast","name":"多重释放","c":"-1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗X点能量激发首个球体X次","uDesc":"消耗X点能量激发首个球体X+打击1次","_char":"defect"},{"id":"sunder","name":"粉碎","c":"3","type":"attack","rarity":"rare","target":"enemy","desc":"28点伤害;回2点能量","uDesc":"36点伤害;回3点能量","_char":"defect"},{"id":"amplify","name":"增幅","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:下张能力x2;获得抽1张牌","uDesc":"能力:下张能力x3+4点格挡","_char":"defect"},{"id":"meteorStrike","name":"陨石打击","c":"4","type":"attack","rarity":"rare","target":"enemy","desc":"28点伤害;生成3等离子球","uDesc":"36点伤害;生成3等离子球+1集中","_char":"neutral"},{"id":"coreSurge","name":"核心电涌","c":"1","type":"attack","rarity":"rare","target":"enemy","desc":"11点伤害;获得1人工制品","uDesc":"15点伤害;获得2人工制品","_char":"neutral"},{"id":"blizzard","name":"暴风雪","c":"1","type":"attack","rarity":"uncommon","target":"all","desc":"每个冰霜球对全体造成4点伤害","uDesc":"每个冰霜球对全体造成6点伤害","_char":"defect"},{"id":"forceField","name":"力场","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获得8格挡;每张能力牌费用降低1点","uDesc":"获得11格挡;每张能力牌费用降低1点","_char":"defect"},{"id":"reboot","name":"重启","c":"2","type":"skill","rarity":"rare","target":"self","desc":"弃所有手牌;抽等量牌;消耗","uDesc":"弃所有手牌;抽等量牌+2;消耗","_char":"defect"},{"id":"hologram","name":"全息影像","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获得6格挡;从弃牌堆选择1张牌回收","uDesc":"获得9格挡;从弃牌堆选择1张牌回收","_char":"defect"},{"id":"thinkingAhead","name":"先见之明","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"抽1张牌;将1张手牌放回抽牌堆顶","uDesc":"抽2张+1能;将1张放回","_char":"neutral"},{"id":"magnetism","name":"磁力","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:每2回合获1传说(费用-1);打出传说牌时+2能","uDesc":"能力:每回合获1传说(费用-2);打出传说牌时+3能+抽1","_char":"neutral"},{"id":"thoughtArmor","name":"思绪铠甲","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每抽1张牌获得1点格挡","uDesc":"能力:每抽1张牌获得2点格挡","_char":"neutral"},{"id":"concentrate","name":"集中","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"弃3张牌;获得2能量+每张2甲","uDesc":"弃2张牌;获得2能量+每张2甲","_char":"neutral"},{"id":"thousandCuts","name":"千刀万剐","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:每2牌全体3伤;每5牌+4甲","uDesc":"能力:每2牌全体4伤;每4牌+5甲+抽1","_char":"neutral"},{"id":"glassKnife","name":"玻璃小刀","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"造成10点伤害x2","uDesc":"造成12点伤害x2","_char":"silent"},{"id":"toolsOfTrade","name":"交易工具","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:回合始抽1弃1;弃牌时随机敌2伤+1甲","uDesc":"能力:回合始抽1弃1;弃牌时随机敌3伤+2甲(固有)","_char":"neutral"},{"id":"reflex","name":"反射","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"抽1张+2甲;若弃过牌额外抽2+4甲","uDesc":"抽1张+4甲;若弃过牌额外抽3+6甲+回能","_char":"defect"},{"id":"samsara","name":"轮回","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:切换姿态+2甲+1念力;退出神格再+1念力","uDesc":"能力:切换姿态+4甲+2念力;退出神格再+2念力","_char":"watcher"},{"id":"divineWrath","name":"神威","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:神格伤害×4;攻击吸血50%","uDesc":"能力:神格伤害×5;攻击吸血50%","_char":"neutral"},{"id":"divineShield","name":"神之庇护","c":"1","type":"skill","rarity":"common","target":"self","desc":"进入宁静;若已在宁静转化格挡为念力(2:1)+抽1","uDesc":"若已在宁静转化格挡为念力(1.5:1)+4甲+抽1","_char":"neutral"},{"id":"painPower","name":"伤痛之力","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:抽到状态牌时+1点力量","uDesc":"能力:抽到状态牌时+2点力量","_char":"neutral"},{"id":"burningSoul","name":"灼烧之魂","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"8点伤害;弃牌堆每张灼烧+6点伤害","uDesc":"12点伤害;弃牌堆每张灼烧+8点伤害","_char":"neutral"},{"id":"woundRecycle","name":"利用伤口","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗手牌所有状态牌;每张+2点格挡+1点能量","uDesc":"消耗手牌所有状态牌;每张+3点格挡+1点能量","_char":"neutral"},{"id":"stormStance","name":"风暴姿态","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:切换姿态时对全体敌人造成5点伤害","uDesc":"能力:切换姿态时对全体敌人造成8点伤害","_char":"defect"},{"id":"stanceDance","name":"姿态切换","c":"0","type":"skill","rarity":"common","target":"self","desc":"怒火↔宁静切换;若中立则进宁静","uDesc":"切换+抽1张牌","_char":"neutral"},{"id":"ironWallPower","name":"铁壁之力","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:获得格挡时+1点力量","uDesc":"能力:获得格挡时+1点力量+获得4点格挡","_char":"neutral"},{"id":"mantraEnergy","name":"念能转化","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每回合+1能量+1念力","uDesc":"能力:每回合+1能量+2念力+2甲","_char":"neutral"},{"id":"toxinStrength","name":"力毒双修","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:施加毒时+1点力量","uDesc":"能力:施加毒时+1点力量+获得5点格挡","_char":"neutral"},{"id":"shieldSacrifice","name":"以盾为祭","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"失去全部格挡;每4点格挡得1念力+1点能量","uDesc":"失去全部格挡;每3点格挡得1念力+1点能量+抽1","_char":"neutral"},{"id":"bladeVenom","name":"刀锋淬毒","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:攻击牌施加3层中毒","uDesc":"能力:攻击牌施加5层中毒","_char":"neutral"},{"id":"jackOfTrades","name":"万金油","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"从3张随机无色牌选1获得牌;消耗","uDesc":"从3张随机无色牌选1获得牌;获得1点能量;消耗","_char":"neutral"},{"id":"wellLaidPlans","name":"缜密计划","c":"0","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合末保留1张手牌","uDesc":"能力:回合末保留2张手牌","_char":"neutral"},{"id":"burst","name":"回响","c":"1","type":"skill","rarity":"rare","target":"self","desc":"本回合下张技能牌打出打击2次;消耗","uDesc":"本回合下张技能牌打出打击2次","_char":"neutral"},{"id":"bloodExplosion","name":"血爆术","c":"1","type":"skill","rarity":"rare","target":"self","desc":"自残4;每失1血全1伤+每20失血+1临时力;消耗","uDesc":"自残4;每失1血全1.5伤+每15失血+2临时力;消耗","_char":"neutral"},{"id":"woundToss","name":"伤口投掷","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"8点伤害;弃牌堆每张状态牌+3点伤害","uDesc":"12点伤害;弃牌堆每张状态牌+5点伤害","_char":"neutral"},{"id":"ironCounter","name":"铁壁反击","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"获得15甲+4刺;下次受伤反射格挡值","uDesc":"获得20甲+8刺;下次受伤反射1.5倍格挡值+抽1","_char":"ironclad"},{"id":"lessonLearned","name":"习得","c":"1","type":"attack","rarity":"rare","target":"enemy","desc":"10点伤害;击杀则随机升级1张牌","uDesc":"15点伤害;击杀则随机升级1张牌","_char":"neutral"},{"id":"talkToHand","name":"问手","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"5点伤害;下回合获得等量格挡","uDesc":"8点伤害;下回合获得等量格挡","_char":"watcher"},{"id":"gustSlash","name":"疾风斩","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"6伤;本回每用1次+2伤","uDesc":"9伤;本回每用1次+3伤","_char":"neutral"},{"id":"energyChannel","name":"能量分流","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"本回合每用3张牌得1点能量(至少1)","uDesc":"本回合每用2张牌得1点能量(至少1)","_char":"neutral"},{"id":"neutralize","name":"中和","c":"0","type":"attack","rarity":"basic","target":"enemy","desc":"4点伤害+1层虚弱","uDesc":"6点伤害+2层虚弱+抽1张牌","_char":"silent"},{"id":"quickSlash","name":"速攻","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"13点伤害;手牌≤3抽1张牌","uDesc":"15点伤害;手牌≤3抽2张牌","_char":"silent"},{"id":"bladeDance","name":"刀舞","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"增加4张小刀到手牌+抽1张牌","uDesc":"增加6张升级小刀到手牌+抽2张牌","_char":"neutral"},{"id":"cloakDagger","name":"斗篷","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"7伤+2小刀+5甲","uDesc":"7伤+4升级小刀+8甲+回1能","_char":"neutral"},{"id":"deadlyPoison","name":"致命毒药","c":"1","type":"skill","rarity":"common","target":"self","desc":"全体+8毒+3甲+抽1","uDesc":"全体+12毒+5甲+抽1+易伤","_char":"silent"},{"id":"noxiousFumes","name":"毒雾","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合全3层中毒+获得3点格挡","uDesc":"能力:回合全5层中毒+获得5点格挡","_char":"silent"},{"id":"catalyst","name":"催化剂","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"所有敌人的中毒层数+50%;消耗","uDesc":"所有敌人的中毒层数翻倍;消耗","_char":"silent"},{"id":"escapePlan","name":"逃脱计划","c":"0","type":"skill","rarity":"common","target":"self","desc":"抽1张牌;若抽到技能+4点格挡","uDesc":"抽1张牌;若抽到技能+7点格挡","_char":"neutral"},{"id":"afterImage","name":"残影","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:每打1牌得2点格挡+获得3点格挡","uDesc":"能力:每打1牌得3点格挡+获得5","_char":"silent"},{"id":"acrobatics","name":"杂技","c":"1","type":"skill","rarity":"common","target":"self","desc":"抽3张牌;弃1张","uDesc":"抽4张牌;弃1张","_char":"silent"},{"id":"dodgeRoll","name":"后空翻","c":"1","type":"skill","rarity":"common","target":"self","desc":"8甲;上张攻击→双倍+抽1","uDesc":"12甲;上张攻击→双倍+抽2","_char":"silent"},{"id":"survivor","name":"生存者","c":"1","type":"skill","rarity":"common","target":"self","desc":"10格挡;弃1张牌+1甲","uDesc":"14格挡;弃1张牌+3甲","_char":"silent"},{"id":"calcGamble","name":"计算下注","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"弃所有+抽等量;消耗","uDesc":"弃所有+抽等+1回能;消耗","_char":"neutral"},{"id":"backstab","name":"背刺","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"8伤;敌上回攻击→双倍+抽1","uDesc":"12伤;敌上回攻击→双倍+抽2","_char":"neutral"},{"id":"skewer","name":"穿刺","c":"-1","type":"attack","rarity":"uncommon","target":"enemy","desc":"X能量:X次9点伤害","uDesc":"X能量:X次12点伤害","_char":"neutral"},{"id":"bane","name":"灾祸","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"7点伤害;若中毒变14点伤害","uDesc":"10点伤害;若中毒变20点伤害","_char":"neutral"},{"id":"piercingWail","name":"尖啸","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"全体-4攻(本回合);消耗","uDesc":"全体-6攻(本回合)+抽1;消耗","_char":"silent"},{"id":"legSweep","name":"扫腿","c":"2","type":"skill","rarity":"common","target":"self","desc":"获得13格挡;对所有敌人造成2点层虚弱","uDesc":"获得17格挡;对所有敌人造成2点层虚弱","_char":"silent"},{"id":"poisonedStab","name":"毒刺","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"8点伤害+4层中毒","uDesc":"10点伤害+6层中毒+抽1张牌","_char":"neutral"},{"id":"cripplingCloud","name":"致残毒云","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"对所有敌人造成4点层中毒+2层虚弱;消耗","uDesc":"对所有敌人造成7点层中毒+2层虚弱;消耗","_char":"neutral"},{"id":"flyingKnee","name":"飞膝","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"10伤;本回每打过1张牌+1伤","uDesc":"14伤;本回每打过1张牌+2伤","_char":"silent"},{"id":"dash","name":"猛冲","c":"2","type":"attack","rarity":"common","target":"enemy","desc":"13点伤害+6点格挡","uDesc":"15点伤害+8点格挡+回复1点能量","_char":"silent"},{"id":"suckerPunch","name":"偷袭","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"8伤;敌虚弱→双倍+抽1","uDesc":"12伤;敌虚弱→双倍+抽2","_char":"neutral"},{"id":"daggerSpray","name":"匕首雨","c":"1","type":"attack","rarity":"common","target":"all","desc":"对所有敌人造成7点x2伤害","uDesc":"对所有敌人造成7点x2+敌虚弱+易伤","_char":"silent"},{"id":"daggerThrow","name":"投匕","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"11点伤害+弃1张牌+抽1张牌","uDesc":"14点伤害+弃时打4+抽1张牌","_char":"silent"},{"id":"footwork","name":"步法","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:+2点敏捷+获得3点格挡","uDesc":"能力:+3点敏捷+获得6点格挡","_char":"silent"},{"id":"caltrops","name":"蒺藜","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合全3点伤害","uDesc":"能力:回合全5+获得3刺","_char":"neutral"},{"id":"predator","name":"掠食","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"20点伤害;下回合多抽2张","uDesc":"26点伤害;下回合多抽2张","_char":"silent"},{"id":"terror","name":"恐慌","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"全体4易伤+2虚弱;消耗","uDesc":"全体4易伤+2弱+下回+2抽;消耗","_char":"neutral"},{"id":"outmaneuver","name":"策略","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"+2点能量+抽1;消耗","uDesc":"+3点能量+抽1;消耗","_char":"silent"},{"id":"riddleHoles","name":"千疮百孔","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"7点伤害x5","uDesc":"10点伤害x5","_char":"neutral"},{"id":"blur","name":"模糊","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"12格挡;下回合不清零","uDesc":"16格挡;下回合不清零","_char":"silent"},{"id":"slice","name":"切割","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"6伤+叠1流血;流血=回合始再伤","uDesc":"9伤+叠2流血;流血=回合始再伤","_char":"neutral"},{"id":"danceKnife","name":"舞刃","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"5点伤害x2;手牌有刀额外+打击1次","uDesc":"8点伤害x2;手牌有刀额外+打击1次+抽1","_char":"neutral"},{"id":"toxinBurst","name":"毒爆","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗敌人所有中毒;每层5点伤害;消耗","uDesc":"消耗敌人所有中毒;每层8点伤害;消耗","_char":"neutral"},{"id":"stormSteel","name":"钢铁风暴","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"丢弃所有手牌;每弃1张获得1张小刀+每弃2张+1甲;消耗","uDesc":"丢弃所有手牌;每弃1张获得2张升级小刀+每弃2张+2甲+回能;消耗","_char":"defect"},{"id":"envenom","name":"涂毒","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:攻击+1层中毒+获得抽1+3甲","uDesc":"能力:攻击+3层中毒+获得抽1+6甲","_char":"silent"},{"id":"phantasmalKiller","name":"幻影杀手","c":"1","type":"power","rarity":"rare","target":"self","desc":"本回合伤害+30%;获得4点格挡","uDesc":"本回合+30%+回复1点能量+6点格挡","_char":"silent"},{"id":"eruption","name":"爆发","c":"1","type":"attack","rarity":"basic","target":"enemy","desc":"9点伤害;进入怒火姿态","uDesc":"12点伤害;进入怒火姿态(2费)","_char":"watcher"},{"id":"vigilance","name":"警惕","c":"1","type":"skill","rarity":"basic","target":"self","desc":"9格挡;进入宁静姿态","uDesc":"12格挡;进入宁静姿态","_char":"watcher"},{"id":"emptyFist","name":"空手","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"14点伤害;退出当前姿态","uDesc":"20点伤害;退出当前姿态+抽1","_char":"watcher"},{"id":"sanctity","name":"神圣","c":"1","type":"skill","rarity":"common","target":"self","desc":"9格挡;抽2张牌","uDesc":"12格挡;抽2张牌","_char":"neutral"},{"id":"fearNoEvil","name":"无畏","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"12点伤害;若敌攻击则进宁静","uDesc":"16点伤害;若敌攻击则进宁静","_char":"watcher"},{"id":"tantrum","name":"暴怒","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"4点伤害x3;进入怒火姿态","uDesc":"6点伤害x3;进入怒火姿态","_char":"neutral"},{"id":"consecrate","name":"圣洁","c":"1","type":"attack","rarity":"uncommon","target":"all","desc":"对所有敌人造成10点伤害;进宁静","uDesc":"对所有敌人造成14点伤害;进宁静+抽1","_char":"watcher"},{"id":"meditate","name":"冥想","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"8点格挡;进宁静;弃1张牌放回抽牌堆","uDesc":"11点格挡;进宁静;弃1张牌放回抽牌堆","_char":"watcher"},{"id":"cutThroughFate","name":"斩破命运","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"9点伤害;抽1张牌后弃1张牌放回抽牌堆","uDesc":"12点伤害;抽1张牌后弃1张牌放回抽牌堆","_char":"watcher"},{"id":"study","name":"研习","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始获1随机牌(费用-1)+3甲","uDesc":"能力:回合始获2随机牌(费用-1)+6甲+抽1","_char":"watcher"},{"id":"pray","name":"祈祷","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"6念力;消耗","uDesc":"10念力+3点格挡;消耗","_char":"watcher"},{"id":"strikeOfFlurry","name":"急袭","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"7点伤害;切换姿态时此牌从弃牌堆返回","uDesc":"10点伤害;切换姿态时返回","_char":"neutral"},{"id":"emptyBody","name":"空体","c":"1","type":"skill","rarity":"common","target":"self","desc":"10点格挡;退出姿态+抽1","uDesc":"14点格挡+抽1;退出姿态","_char":"watcher"},{"id":"wheelKick","name":"轮踢","c":"2","type":"attack","rarity":"common","target":"enemy","desc":"16点伤害;抽2张牌","uDesc":"20点伤害;抽2张牌","_char":"watcher"},{"id":"worship","name":"崇拜","c":"2","type":"skill","rarity":"rare","target":"self","desc":"5念力;消耗","uDesc":"进神格;消耗","_char":"watcher"},{"id":"prostrate","name":"伏地","c":"1","type":"skill","rarity":"common","target":"self","desc":"4点格挡+3念力","uDesc":"6点格挡+4念力","_char":"watcher"},{"id":"devotion","name":"虔诚","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合5念力;获得5点格挡","uDesc":"能力:回合7+获得8","_char":"watcher"},{"id":"brilliance","name":"光辉","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"12+念力伤","uDesc":"16+念力伤","_char":"watcher"},{"id":"conclude","name":"终结","c":"1","type":"attack","rarity":"uncommon","target":"all","desc":"对所有敌人造成16点伤害;消耗","uDesc":"全体20伤;消耗","_char":"watcher"},{"id":"rushdown","name":"急冲","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"6点伤害;进过怒火则抽2张牌","uDesc":"10点伤害;进过怒火则抽2张牌","_char":"watcher"},{"id":"mentalFortress","name":"精神壁垒","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:切换姿态得8点格挡+抽1张牌","uDesc":"能力:切换姿态得12点格挡+抽1张牌","_char":"watcher"},{"id":"indignation","name":"愤怒","c":"1","type":"skill","rarity":"common","target":"self","desc":"2念力;怒火时8点格挡","uDesc":"3念力;怒火时12点格挡","_char":"neutral"},{"id":"evaluate","name":"评估","c":"1","type":"skill","rarity":"common","target":"self","desc":"11点格挡+抽1张牌;宁静额外4点格挡","uDesc":"14点格挡+抽1张牌;宁静额外4点格挡","_char":"watcher"},{"id":"likeWater","name":"如水","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:宁静末+10点格挡+获得4点格挡","uDesc":"能力:宁静末+14点格挡+获得6","_char":"watcher"},{"id":"meditateSimple","name":"凝神","c":"0","type":"skill","rarity":"common","target":"self","desc":"1念力+抽1张牌;消耗","uDesc":"2念力+抽1张牌;消耗","_char":"watcher"},{"id":"battleHymn","name":"战歌","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"每回合合1张随机攻费用降低1点","uDesc":"每回合合2张随机攻费用降低1点","_char":"watcher"},{"id":"sigSoul","name":"魂之羁绊","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"12点伤害;切换过姿态+8","uDesc":"16点伤害;切换过姿态+10","_char":"neutral"},{"id":"innerPeace","name":"内心宁静","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"宁静时抽3张牌;否则进宁静","uDesc":"宁静时抽4张牌;否则进宁静","_char":"watcher"},{"id":"crescendo","name":"渐强","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"进怒火;消耗","uDesc":"进怒火+抽1张牌;消耗","_char":"neutral"},{"id":"halt","name":"止步","c":"1","type":"skill","rarity":"common","target":"self","desc":"6点格挡;怒火时+9点格挡","uDesc":"9点格挡;怒火时+12点格挡","_char":"watcher"},{"id":"flyingSleeves","name":"飞袖","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"每张手牌+1伤(二连击)","uDesc":"每张手牌+2伤(二连击)","_char":"neutral"},{"id":"clearMind","name":"清醒","c":"1","type":"skill","rarity":"common","target":"self","desc":"8点格挡+退出姿态+抽1张牌","uDesc":"11点格挡+退出姿态+抽1张牌","_char":"neutral"},{"id":"justLucky","name":"只靠运气","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"随机:7伤/5甲/2毒x2","uDesc":"随机:10伤/7甲/3毒x3","_char":"neutral"},{"id":"furyFist","name":"怒拳","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"12点伤害;怒火时+6点格挡","uDesc":"16点伤害;怒火时+8点格挡","_char":"neutral"},{"id":"windGuard","name":"御风","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"12点格挡;宁静时抽2张牌","uDesc":"16点格挡;宁静时抽3张牌","_char":"neutral"},{"id":"secondWind","name":"第二阵风","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗所有非攻击;每张5甲+随机敌3伤","uDesc":"每张8甲+随机敌5伤+回能","_char":"ironclad"},{"id":"bulletTime","name":"子弹时间","c":"3","type":"skill","rarity":"rare","target":"self","desc":"手牌费用降为0(本回合)","uDesc":"2费","_char":"neutral"},{"id":"dieDieDie","name":"灭歌","c":"1","type":"attack","rarity":"rare","target":"all","desc":"对所有敌人造成10点伤害;消耗","uDesc":"对所有敌人造成14点伤害;消耗","_char":"silent"},{"id":"handOfGreed","name":"贪婪之手","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"12伤;每10金+1伤+1金","uDesc":"16伤;每8金+1伤+2金","_char":"watcher"},{"id":"burningArmor","name":"烈焰战甲","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"回合8点格挡;有灼烧+5+抽1张牌","uDesc":"回合12点格挡;有灼烧+7+抽1张牌","_char":"neutral"},{"id":"poisonFrenzy","name":"毒血沸腾","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"每毒+2点力量+2点格挡(本回合);消耗","uDesc":"每毒+3点力量+3点格挡;消耗","_char":"neutral"},{"id":"shadowStance","name":"暗影姿态","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"切换姿态全2层中毒+抽1张牌","uDesc":"切换姿态全3层中毒+抽1张牌","_char":"neutral"},{"id":"orbResonance","name":"能量共鸣","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"每球种得2念力+抽1张牌","uDesc":"每球种得3念力+抽2张牌","_char":"neutral"},{"id":"soulLink","name":"灵魂链接","c":"1","type":"power","rarity":"rare","target":"self","desc":"失1血抽3张牌+1点力量;获得回复5点","uDesc":"失1血抽4张牌+1点力量+获得8","_char":"neutral"},{"id":"ironBastion","name":"铁壁","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"12点格挡;每消耗张+5点格挡+抽1张牌","uDesc":"18点格挡;每消耗张+7点格挡+抽1张牌","_char":"neutral"},{"id":"poisonDagger","name":"淬毒匕首","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"3伤+2毒;敌有毒→毒翻倍+消耗","uDesc":"5伤+3毒;敌有毒→毒翻倍+消耗","_char":"neutral"},{"id":"yinYang","name":"阴阳","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:切换姿态抽1张牌+1点格挡","uDesc":"能力:切换姿态抽2张牌+2点格挡+回复1点能量","_char":"watcher"},{"id":"overload","name":"过载","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"集中+3;球位-1;下张球牌复制;消耗","uDesc":"集中+4+5甲;球位-1;下两张球牌复制;消耗","_char":"defect"},{"id":"soulBarrier","name":"魂之壁垒","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗牌数×4点格挡;获得抽1张牌","uDesc":"消耗牌数×6点格挡+抽1张牌","_char":"neutral"},{"id":"toxicCloud","name":"毒云","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"对所有敌人造成5点层中毒+2层虚弱;消耗","uDesc":"全体8毒+3层虚弱;消耗","_char":"neutral"},{"id":"lightningStorm","name":"雷霆风暴","c":"2","type":"attack","rarity":"rare","target":"all","desc":"对所有敌人造成5点伤害x2;每电球+2点伤害","uDesc":"对所有敌人造成7点伤害x2;每电球+3点伤害","_char":"neutral"},{"id":"endlessAgony","name":"无尽痛苦","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"抽到时复制一张;打出+1能量+抽1;消耗","uDesc":"抽到时复制一张;打出+1能量+抽1+全敌3伤;消耗","_char":"neutral"},{"id":"prepared","name":"准备","c":"0","type":"skill","rarity":"common","target":"self","desc":"抽1张牌;弃1张牌+1甲","uDesc":"抽2张牌;弃1张牌+2甲","_char":"neutral"},{"id":"poisonBlade","name":"淬毒之刃","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"6点伤害+4层中毒","uDesc":"9点伤害+6层中毒","_char":"neutral"},{"id":"shadowStep","name":"暗影步","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"6点格挡;抽1张牌","uDesc":"9点格挡;抽2张牌","_char":"neutral"},{"id":"fusion","name":"聚变","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"生成1个等离子球","uDesc":"生成1个等离子球;抽1张牌","_char":"defect"},{"id":"equilibrium","name":"均衡","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"14点格挡;保留手牌(本回合)","uDesc":"18点格挡;保留手牌(本回合)","_char":"defect"},{"id":"machineLearning","name":"机器学习","c":"1","type":"power","rarity":"rare","target":"self","desc":"每回合合多抽1张牌;虚无","uDesc":"每回合合多抽1张牌;获得5点格挡;虚无","_char":"defect"},{"id":"biasedCognition","name":"偏差认知","c":"1","type":"power","rarity":"rare","target":"self","desc":"集中+3;每回合合-1集中","uDesc":"集中+5;每回合合-1集中","_char":"neutral"},{"id":"combust","name":"自燃","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"每回合合自伤1点并对所有敌人造成7点伤害","uDesc":"每回合合自伤1点并对所有敌人造成9点+全易伤","_char":"neutral"},{"id":"juggernaut","name":"冲锋者","c":"2","type":"power","rarity":"rare","target":"self","desc":"获得格挡时对敌人5点伤害","uDesc":"获得格挡时对敌人8+全1层虚弱","_char":"neutral"},{"id":"rage","name":"愤怒","c":"0","type":"skill","rarity":"common","target":"self","desc":"本回合受伤时+3点格挡","uDesc":"本回合受伤时+5点格挡","_char":"neutral"},{"id":"reachHeaven","name":"冲天","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"10点伤害;加入1张\"登天\"(0费22伤)","uDesc":"14点伤害;加入1张升级\"登天\"(0费30伤)","_char":"watcher"},{"id":"carveReality","name":"刻现实","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6点伤害;获得1张\"重击\"","uDesc":"10点伤害;获得2张\"重击\"","_char":"watcher"},{"id":"crushJoints","name":"碎关节","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"7点伤害;若敌人易伤回复1点能量","uDesc":"10点伤害;若敌人易伤回复1点能量","_char":"watcher"},{"id":"deceiveReality","name":"欺现实","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"4点格挡;获得1张\"护盾\"","uDesc":"6点格挡;获得2张\"护盾\"","_char":"watcher"},{"id":"foreignInfluence","name":"外势","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"从3张随机攻击牌选1获得;消耗","uDesc":"从3张随机攻击牌选1获得(0费);消耗","_char":"watcher"},{"id":"foresight","name":"预见","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合开始抽1张牌弃1张牌;获得抽1张牌","uDesc":"能力:回合开始抽2张牌弃1张牌+获得4点格挡","_char":"watcher"},{"id":"masterReality","name":"主现实","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:生成的卡牌升级","uDesc":"能力:生成的卡牌升级+获得4点格挡","_char":"watcher"},{"id":"mantraStorm","name":"念力风暴","c":"-1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗X点能量获得X念力+进宁静","uDesc":"消耗X点能量获得X+1念力+进宁静","_char":"neutral"},{"id":"corpseExplosion","name":"尸爆","c":"1","type":"skill","rarity":"rare","target":"self","desc":"对所有敌人造成6点层中毒;死亡时对全体造成最大生命值伤害;消耗;虚无","uDesc":"对所有敌人造成9点层中毒;死亡时对全体造成最大生命值伤害;消耗;虚无","_char":"silent"},{"id":"eviscerate","name":"剔骨","c":"3","type":"attack","rarity":"uncommon","target":"enemy","desc":"7点伤害x本回合弃牌数(每弃1张牌费用降低1点)","uDesc":"10点伤害x本回合弃牌数(每弃1张牌费用降低1点)","_char":"silent"},{"id":"infiniteBlades","name":"无尽刀锋","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合开始获得3张小刀","uDesc":"能力:回合开始获得5张小刀","_char":"neutral"},{"id":"malaise","name":"萎靡","c":"-1","type":"skill","rarity":"rare","target":"self","desc":"消耗X点能量全体X毒+X虚弱;消耗","uDesc":"消耗X点能量全体X+1层中毒+X+1层虚弱;消耗","_char":"silent"},{"id":"toxicWave","name":"毒波","c":"-1","type":"skill","rarity":"uncommon","target":"all","desc":"X费:每敌毒→相邻1毒+2甲/敌","uDesc":"X费:每敌毒→相邻2毒+4甲/敌","_char":"neutral"},{"id":"wraithForm","name":"幽魂形态","c":"2","type":"power","rarity":"rare","target":"self","desc":"能力:获得2层\"虚无\"(受伤降为1);虚无","uDesc":"能力:获得3层\"虚无\"(受伤降为1);虚无","_char":"silent"},{"id":"tactician","name":"策略家","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"若本回合弃过牌+1点能量;消耗","uDesc":"若本回合弃过牌+2点能量;消耗","_char":"silent"},{"id":"expertise","name":"专精","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"抽牌直到手牌达到6张+获得3甲","uDesc":"抽牌直到手牌达到7张+获得5甲","_char":"neutral"},{"id":"chill","name":"寒气","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"每有1个敌人生成1冰霜球;消耗","uDesc":"每有1个敌人生成1冰霜球+1集中;消耗","_char":"defect"},{"id":"creativeAI","name":"创造性AI","c":"3","type":"power","rarity":"rare","target":"self","desc":"能力:回合开始获得1张随机能力牌","uDesc":"能力:回合开始获得1张随机能力牌(2费)","_char":"defect"},{"id":"darkness","name":"暗黑","c":"1","type":"skill","rarity":"common","target":"self","desc":"生成1暗黑球","uDesc":"生成1暗黑球;暗黑伤害+4","_char":"neutral"},{"id":"shadowStrike","name":"暗影打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6点伤害+生成1暗黑球","uDesc":"9点伤害+生成1暗黑球+1层易伤","_char":"neutral"},{"id":"plasmaShield","name":"等离子护盾","c":"1","type":"skill","rarity":"common","target":"self","desc":"5点格挡+生成1等离子球","uDesc":"8点格挡+生成1等离子球+抽1张牌","_char":"neutral"},{"id":"shadowBurst","name":"暗影爆发","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"生成2暗黑球+获得4格挡","uDesc":"生成2暗黑球+获得6格挡+抽1张牌","_char":"neutral"},{"id":"voidPower","name":"虚空之力","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始+2印记+3甲","uDesc":"能力:回合始+3印记+5甲+抽1","_char":"neutral"},{"id":"plasmaSurge","name":"等离子过载","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"14点伤害+生成1等离子球","uDesc":"18点伤害+生成2等离子球+1集中","_char":"neutral"},{"id":"plasmaRush","name":"电浆激涌","c":"0","type":"skill","rarity":"common","target":"self","desc":"生成1等离子球;消耗","uDesc":"生成1等离子球+3点格挡;消耗","_char":"neutral"},{"id":"fission","name":"裂变","c":"0","type":"skill","rarity":"rare","target":"self","desc":"移除所有球体;每球+1点能量+抽1张牌;消耗","uDesc":"移除所有球体;每球+2点能量+抽1张牌;消耗","_char":"defect"},{"id":"helloWorld","name":"你好世界","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合开始获得1张随机普通卡","uDesc":"能力:回合开始获得1张随机普通卡(固有)","_char":"neutral"},{"id":"ripAndTear","name":"撕扯","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"随机敌人7点伤害x2","uDesc":"随机敌人10点伤害x2","_char":"defect"},{"id":"turbo","name":"涡轮","c":"0","type":"skill","rarity":"common","target":"self","desc":"+2点能量;消耗","uDesc":"+3点能量;消耗","_char":"defect"},{"id":"anger","name":"怒意","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"8点伤害;复制消耗(复制不触发连击)","uDesc":"11点伤害;复制消耗(复制不触发连击)","_char":"neutral"},{"id":"bloodForBlood","name":"以血还血","c":"4","type":"attack","rarity":"uncommon","target":"enemy","desc":"22点伤害;本场每失去3HP费用降低1点","uDesc":"28点伤害;本场每失去3HP费用降低1点","_char":"neutral"},{"id":"clothesline","name":"晾衣绳","c":"2","type":"attack","rarity":"common","target":"enemy","desc":"12伤+2弱;敌甲→额外伤","uDesc":"17伤+3弱;敌甲→额外伤x2","_char":"neutral"},{"id":"dualWield","name":"双持","c":"1","type":"skill","rarity":"rare","target":"self","desc":"复制1张手牌(保留);消耗","uDesc":"复制1张手牌(保留);0费","_char":"neutral"},{"id":"havoc","name":"浩劫","c":"1","type":"skill","rarity":"common","target":"self","desc":"打出抽牌堆顶牌;抽1张牌;消耗","uDesc":"打出抽牌堆顶牌;抽2张牌;消耗","_char":"neutral"},{"id":"searingBlow","name":"灼热打击","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"16点伤害;可在篝火多次升级(+10/级)","uDesc":"22点伤害;可在篝火多次升级(+12/级)","_char":"neutral"},{"id":"shockwave","name":"冲击波","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"对所有敌人造成4点层易伤+4层虚弱;消耗","uDesc":"对所有敌人造成6点层易伤+6层虚弱;消耗","_char":"neutral"},{"id":"powerThrough","name":"力量突破","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"18点格挡;获得2张伤口","uDesc":"24点格挡;获得2张伤口","_char":"neutral"},{"id":"accuracy","name":"精准","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:小刀+5点伤害+获得4甲","uDesc":"能力:小刀+10点伤害+获得6甲","_char":"neutral"},{"id":"bouncingFlask","name":"弹跳毒瓶","c":"2","type":"skill","rarity":"uncommon","target":"self","desc":"随机敌4层中毒x3","uDesc":"随机敌4层中毒x5","_char":"silent"},{"id":"finisher","name":"终结技","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"本回合每打1攻击牌造成6点伤害","uDesc":"本回合每打1攻击牌造成9点伤害","_char":"silent"},{"id":"sneakyStrike","name":"隐秘打击","c":"2","type":"attack","rarity":"common","target":"enemy","desc":"12点伤害;若弃过牌回复1点能量","uDesc":"16点伤害;若弃过牌回复1点能量","_char":"silent"},{"id":"ftl","name":"超光速","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"7点伤害;已打3牌则抽1张牌","uDesc":"9点伤害;已打3牌则抽1张牌","_char":"neutral"},{"id":"lockOn","name":"锁定","c":"1","type":"skill","rarity":"common","target":"self","desc":"对所有敌人造成6点伤害;本回合易伤+2","uDesc":"对所有敌人造成9点伤害;本回合易伤+3","_char":"neutral"},{"id":"scrape","name":"刮削","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"11点伤害;抽1张牌;若0费再抽1张牌","uDesc":"14点伤害;抽1张牌;0费再抽1张牌","_char":"defect"},{"id":"reprogram","name":"重编程","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"-2点力量+2点敏捷+1集中","uDesc":"-2点力量+3点敏捷+2集中","_char":"defect"},{"id":"redo","name":"重做","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"激发最右侧的球;消耗","uDesc":"激发最右侧的球+抽1张牌;消耗","_char":"defect"},{"id":"dragonFlame","name":"龙焰","c":"6","type":"attack","rarity":"rare","target":"all","desc":"60+关卡x10全体;每打1牌-1费","uDesc":"80+关卡x12全体;每打1牌-1费","_char":"neutral"},{"id":"berserk","name":"狂暴","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:每回合+1能量;虚无","uDesc":"能力:每回合+1能量+抽1;虚无","_char":"neutral"},{"id":"brutality","name":"残忍","c":"0","type":"power","rarity":"uncommon","target":"self","desc":"能力:每回合抽1张牌点伤害1;获得3点格挡","uDesc":"能力:每回合抽1张牌点伤害1回复1点+获得5点格挡","_char":"neutral"},{"id":"vault","name":"穹顶","c":"3","type":"skill","rarity":"rare","target":"self","desc":"结束本回合并获得额外回合;消耗","uDesc":"结束本回合并获得额外回合(+2点格挡);消耗","_char":"watcher"},{"id":"apotheosis","name":"神化","c":"2","type":"skill","rarity":"rare","target":"self","desc":"本场战斗升级所有手牌并抽牌堆;消耗","uDesc":"本场战斗升级所有手牌和牌组;消耗","_char":"neutral"},{"id":"enlightenment","name":"顿悟","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"本回合手牌费用-1;消耗","uDesc":"本回合手牌费用-1+抽2张;消耗","_char":"neutral"},{"id":"sadisticNature","name":"施虐本性","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:攻击有Debuff的敌人+2点伤害","uDesc":"能力:攻击有Debuff的敌人+4点伤害","_char":"neutral"},{"id":"torment","name":"折磨","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:攻击Debuff敌人+1点伤害","uDesc":"能力:攻击Debuff敌人+2点伤害+获得3点格挡","_char":"neutral"},{"id":"reprisal","name":"报复","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:受伤时对全体造成2点伤害","uDesc":"能力:受伤时对全体造成3点伤害+获得3点格挡","_char":"neutral"},{"id":"fasting","name":"斋戒","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每打2牌+1能+1甲;获得回合-1力","uDesc":"能力:每打1牌+1能+2甲;获得回合-2力","_char":"watcher"},{"id":"panache","name":"绝技","c":"0","type":"power","rarity":"rare","target":"self","desc":"能力:每4牌对所有敌人造成10点伤害","uDesc":"能力:每3牌对所有敌人造成15点伤害","_char":"neutral"},{"id":"venomStrike","name":"毒刃打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"5伤+3毒;每5毒+1伤","uDesc":"7伤+4毒;每4毒+1伤","_char":"neutral"},{"id":"razorWind","name":"刀扇","c":"1","type":"attack","rarity":"uncommon","target":"all","desc":"每弃/消1牌全敌4伤","uDesc":"每弃/消1牌全敌6伤","_char":"silent"},{"id":"toxicShield","name":"毒盾","c":"1","type":"skill","rarity":"common","target":"self","desc":"5点格挡;敌有毒时翻倍","uDesc":"8点格挡;敌有毒时翻倍","_char":"neutral"},{"id":"fortress","name":"壁垒","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:消耗时+2点格挡","uDesc":"能力:消耗时+3点格挡+获得4点格挡","_char":"neutral"},{"id":"decayingStrike","name":"腐朽打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"10点伤害+塞1伤口","uDesc":"14点伤害+塞2伤口","_char":"ironclad"},{"id":"steadyStance","name":"稳定姿态","c":"1","type":"skill","rarity":"common","target":"self","desc":"进宁静;若已在宁静+10点格挡","uDesc":"进宁静;若已在宁静+14点格挡","_char":"neutral"},{"id":"poisonShiv","name":"淬毒小刀","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"4点伤害+2层中毒;击杀+1点能量","uDesc":"6点伤害+3层中毒;击杀+1点能量","_char":"neutral"},{"id":"ascension","name":"飞升","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:回合+2点力量;虚无","uDesc":"能力:回合+3点力量;虚无","_char":"neutral"},{"id":"allOutAttack","name":"全面攻击","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"10全体;每弃1牌+4伤","uDesc":"14全体;每弃1牌+6伤","_char":"silent"},{"id":"persistence","name":"坚持不懈","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合末保留3张牌+抽1","uDesc":"能力:回合末保留4张牌+抽2","_char":"neutral"},{"id":"stoneForm","name":"石化形态","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:退出姿态时+5甲+随机敌5伤;宁静回末+3甲","uDesc":"能力:退出姿态时+8甲+随机敌8伤;宁静回末+5甲","_char":"watcher"},{"id":"collect","name":"收集念力","c":"1","type":"skill","rarity":"common","target":"self","desc":"获得6念力+3甲;甲>10时念力翻倍","uDesc":"获得10念力+6甲;甲>10时念力+甲翻倍","_char":"watcher"},{"id":"magneticField","name":"磁场","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"失去全部格挡;每5点格挡生成1随机球","uDesc":"失去全部格挡;每4点格挡生成1随机球","_char":"neutral"},{"id":"hauntedSmirk","name":"阴森微笑","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"消耗1张手牌;获得4点格挡;抽1张牌","uDesc":"消耗1张手牌;获得6点格挡;抽1张牌","_char":"neutral"},{"id":"spinningTop","name":"旋转陀螺","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"抽至5张手牌;弃1张","uDesc":"抽至6张手牌;弃1张","_char":"neutral"},{"id":"exploitWeakness","name":"弱点利用","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6点伤害;每有1种Debuff+4点伤害","uDesc":"10点伤害;每有1种Debuff+4点伤害","_char":"neutral"},{"id":"spreadAffliction","name":"扩散苦难","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"复制1敌Debuff到全体;消耗","uDesc":"复制1敌Debuff到全体+抽1张牌;消耗","_char":"neutral"},{"id":"shadowRitual","name":"暗影仪式","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"对所有敌人造成1点层虚弱+1层易伤;+1点能量;消耗","uDesc":"对所有敌人造成2点层虚弱+2层易伤;+1点能量+抽1张牌;消耗","_char":"neutral"},{"id":"debilitatingStrike","name":"虚弱打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6点伤害+2层虚弱+2层易伤","uDesc":"10点伤害+3层虚弱+3层易伤","_char":"ironclad"},{"id":"venomMastery","name":"毒药大师","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:施加Debuff+1层;获得抽1张牌","uDesc":"能力:施加Debuff+2层;获得抽1张牌+3点格挡","_char":"ironclad"},{"id":"voidShield","name":"虚空盾","c":"1","type":"skill","rarity":"common","target":"self","desc":"8甲;消耗所有印记每层+3甲+1荆棘","uDesc":"12甲;消耗所有印记每层+5甲+2荆棘","_char":"ironclad"},{"id":"desperateStrike","name":"绝境打击","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"6点伤害;每种Debuff+4点伤害(全敌统计)","uDesc":"10点伤害;每种Debuff+5点伤害(全敌统计)","_char":"ironclad"},{"id":"staticCharge","name":"静电充能","c":"1","type":"skill","rarity":"common","target":"self","desc":"5点格挡;每获得5点格挡生成1闪电球","uDesc":"8点格挡;每获得4点格挡生成1闪电球","_char":"neutral"},{"id":"ironResonance","name":"铁甲共鸣","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗1张手牌;获得2点力量","uDesc":"消耗1张手牌;获得3点力量","_char":"ironclad"},{"id":"windDance","name":"风之舞","c":"0","type":"skill","rarity":"common","target":"self","desc":"获得2张小刀","uDesc":"获得3张升级小刀;+2甲","_char":"silent"},{"id":"yinOrb","name":"阴阳球","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"生成1冰霜球;获得3念力","uDesc":"生成1冰霜球;获得5念力","_char":"neutral"},{"id":"berserkerSoul","name":"狂战士之魂","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合开始时每有1点力量获得1点格挡","uDesc":"能力:回合开始时每有1点力量获得2点格挡","_char":"ironclad"},{"id":"thornVine","name":"荆棘藤","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:敌人受中毒伤害时+1荆棘","uDesc":"能力:敌人受中毒伤害时+2荆棘","_char":"neutral"},{"id":"nimble","name":"灵巧","c":"0","type":"skill","rarity":"common","target":"self","desc":"获得3点格挡+1点敏捷","uDesc":"获得5点格挡+2点敏捷","_char":"silent"},{"id":"echoStrike","name":"回响打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6伤;回合末复制到弃牌堆","uDesc":"9伤;回合末复制到弃牌堆","_char":"neutral"},{"id":"energyTide","name":"能量潮汐","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:上回≥3牌+1能量","uDesc":"能力:上回≥2牌+1能量","_char":"neutral"},{"id":"resonanceStrike","name":"共鸣震击","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"5伤;每种切换过的姿态+5伤","uDesc":"8伤;每种切换过的姿态+5伤","_char":"neutral"},{"id":"voidDrain","name":"虚空汲取","c":"0","type":"skill","rarity":"common","target":"self","desc":"抽1+1印记;若有手牌弃1+2印记","uDesc":"抽1+2印记;若有手牌弃1+3印记","_char":"neutral"},{"id":"chainBlast","name":"连环爆","c":"-1","type":"attack","rarity":"uncommon","target":"enemy","desc":"X费:5伤xX;空手时8伤xX","uDesc":"X费:7伤xX;空手时11伤xX","_char":"neutral"},{"id":"timeRift","name":"时间裂隙","c":"1","type":"skill","rarity":"common","target":"self","desc":"退出姿态;每切换过1种姿态+3甲","uDesc":"退出姿态;每切换过1种姿态+5甲","_char":"neutral"},{"id":"overcharge","name":"电能过载","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"+2能量;下回合-1能量;消耗","uDesc":"+3能量;下回合-1能量;消耗","_char":"neutral"},{"id":"markStrike","name":"印记打击","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"6伤;施加1层印记;每层+3伤","uDesc":"10伤;施加1层印记;每层+3伤","_char":"neutral"},{"id":"foreseeFuture","name":"预知未来","c":"1","type":"skill","rarity":"rare","target":"self","desc":"看抽牌堆顶4张;选1张入手","uDesc":"看抽牌堆顶5张;选2张入手","_char":"neutral"},{"id":"energyConvert","name":"能量转换","c":"0","type":"skill","rarity":"common","target":"self","desc":"失去全部格挡;每5甲换1能量;虚无","uDesc":"失去全部格挡;每4甲换1能量;虚无","_char":"neutral"},{"id":"weaponEnchant","name":"武器附魔","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每回合首次攻击+50%伤害","uDesc":"能力:每回合首次攻击+75%伤害;获得4甲","_char":"neutral"},{"id":"shadowBlade","name":"暗影之刃","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:回合开始+1小刀;消耗时+1小刀","uDesc":"能力:回合开始+2小刀;消耗时+1小刀","_char":"defect"},{"id":"chaosVortex","name":"混沌漩涡","c":"-1","type":"skill","rarity":"uncommon","target":"self","desc":"X费:生X随机球;球位≥3额外+1;消耗","uDesc":"X费:生X+1随机球;球位≥3额外+2;消耗","_char":"defect"},{"id":"phaseShift","name":"相位转移","c":"1","type":"skill","rarity":"rare","target":"self","desc":"下回合受伤减半;消耗","uDesc":"下回合受伤减半+获得6甲;消耗","_char":"neutral"},{"id":"soulReap","name":"灵魂收割","c":"1","type":"attack","rarity":"rare","target":"enemy","desc":"12伤;回复3血","uDesc":"16伤;回复5血","_char":"ironclad"},{"id":"effectTheft","name":"效果窃取","c":"1","type":"skill","rarity":"rare","target":"self","desc":"偷取所有敌人1层力量(永久)","uDesc":"偷取所有敌人2层力量(永久)","_char":"neutral"},{"id":"mirrorStrike","name":"镜像打击","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"8伤;获得1反射印记;印记=每层+2甲","uDesc":"12伤;获得2反射印记;印记=每层+3甲","_char":"neutral"},{"id":"riskInvestment","name":"风险投资","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"查看牌库顶:攻击则0费打出,否则弃掉+自伤2;消耗","uDesc":"查看牌库顶:攻击则0费打出,否则弃掉+自伤1;消耗","_char":"neutral"},{"id":"buffPurge","name":"增益清除","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"移除所有敌人力量和格挡;消耗","uDesc":"移除所有敌人力量格挡+获得4格挡;消耗","_char":"neutral"},{"id":"orderManipulate","name":"牌序操控","c":"1","type":"skill","rarity":"rare","target":"self","desc":"查看顶3张;重新排序;抽1张","uDesc":"查看顶4张;重新排序;抽2张","_char":"neutral"},{"id":"shivStorm","name":"刀锋风暴","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:打出小刀全敌2伤+获得3甲","uDesc":"能力:打出小刀全敌3伤+获得5甲","_char":"silent"},{"id":"shivGuard","name":"刀甲","c":"1","type":"skill","rarity":"common","target":"self","desc":"获得10格挡;本回每打1小刀+4格挡","uDesc":"获得14格挡;本回每打1小刀+5格挡","_char":"silent"},{"id":"venomEdge","name":"淬毒刃","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:小刀额外造成1点中毒","uDesc":"能力:小刀额外造成2点中毒","_char":"silent"},{"id":"shivRecall","name":"刀锋回流","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"获得本回打出等量小刀","uDesc":"获得本回打出等量升级小刀","_char":"silent"},{"id":"ironShield","name":"铁壁","c":"1","type":"skill","rarity":"common","target":"self","desc":"获得10格挡;下回合+2格挡","uDesc":"获得15格挡;下回合+4格挡","_char":"ironclad"},{"id":"energySurge","name":"能量涌动","c":"0","type":"skill","rarity":"common","target":"self","desc":"下回合+1能量;消耗","uDesc":"下回合+2能量;抽1张;消耗","_char":"ironclad"},{"id":"lifeDrain","name":"生命汲取","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"10点伤害;回复等量生命","uDesc":"15点伤害;回复等量生命","_char":"ironclad"},{"id":"doubleStrike","name":"双重打击","c":"1","type":"skill","rarity":"rare","target":"self","desc":"本回合下张攻击牌打出2次;抽1张;消耗","uDesc":"本回合下张攻击牌打出2次;抽2张;消耗","_char":"ironclad"},{"id":"frostOrbMastery","name":"冰霜掌控","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每2冰球+1集中;获得3甲","uDesc":"能力:每2冰球+1集中+1球位;获得5甲","_char":"defect"},{"id":"lastStand","name":"背水一战","c":"0","type":"skill","rarity":"common","target":"self","desc":"每张手牌+1甲;空手+12甲;消耗","uDesc":"每张+2甲;空手+18甲;消耗","_char":"ironclad"},{"id":"borrowedTime","name":"预支未来","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"获得2能量;下回合-2抽;消耗","uDesc":"获得3能量;下回合-2抽;消耗","_char":"neutral"},{"id":"retribution","name":"以牙还牙","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"造成本回合已损失HP的伤害(最少6)","uDesc":"造成本回合已损失HP×1.5伤害(最少10)","_char":"ironclad"},{"id":"greedBlade","name":"贪欲之刃","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"6伤+每10金币+1(上限+10)","uDesc":"9伤+每8金币+1(上限+15)","_char":"ironclad"},{"id":"chainRxnPower","name":"连锁反应","c":"2","type":"power","rarity":"rare","target":"self","desc":"能力:每3牌随机手牌-1费","uDesc":"能力:每2牌随机手牌-1费+抽1","_char":"neutral"},{"id":"mirrorRealm","name":"镜像空间","c":"1","type":"skill","rarity":"rare","target":"self","desc":"复制1手牌(费-1)+1反射;印记=牌数+2甲","uDesc":"复制1手牌(费-2)+2反射;印记=牌数+4甲","_char":"neutral"},{"id":"timeFracture","name":"时间断层","c":"2","type":"skill","rarity":"rare","target":"self","desc":"结束回合;下回+1能+2抽;消耗","uDesc":"结束回合;下回+2能+3抽;消耗","_char":"neutral"},{"id":"undercurrent","name":"暗流涌动","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合末每剩1能+2甲","uDesc":"能力:回合末每剩1能+3甲","_char":"ironclad"},{"id":"redirect","name":"借力打力","c":"1","type":"skill","rarity":"common","target":"self","desc":"失去半甲;每失3甲随机敌2伤","uDesc":"失去半甲;每失2甲随机敌3伤","_char":"ironclad"},{"id":"chaosGate","name":"混沌之门","c":"2","type":"power","rarity":"rare","target":"self","desc":"能力:回合始获1随机0费牌","uDesc":"能力:回合始获2随机0费牌","_char":"defect"},{"id":"fateWheel","name":"命运轮盘","c":"1","type":"skill","rarity":"rare","target":"self","desc":"🎰转动命运轮盘(有风险);消耗","uDesc":"🎰转动命运轮盘(大奖更多);消耗","_char":"neutral"},{"id":"timeCapsule","name":"时间胶囊","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"从消耗堆回收1张随机牌","uDesc":"从消耗堆回收1张牌(已升级)","_char":"defect"},{"id":"bargain","name":"等价交换","c":"0","type":"skill","rarity":"common","target":"self","desc":"失去2血;获5甲+抽1","uDesc":"失去2血;获8甲+抽2","_char":"ironclad"},{"id":"luckyStar","name":"幸运星","c":"0","type":"skill","rarity":"rare","target":"self","desc":"🌟随机小福星;消耗","uDesc":"🌟随机福星(更强);消耗","_char":"neutral"},{"id":"mimic","name":"模仿","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"造成敌人力量×2伤害(最少6);消耗","uDesc":"造成敌人力量×3伤害(最少10);消耗","_char":"neutral"},{"id":"starBurst","name":"星爆","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"14伤;获6辉星","uDesc":"20伤;获8辉星+抽1","_char":"regent"},{"id":"radiantStar","name":"辐射星","c":"1","type":"attack","rarity":"common","target":"all","desc":"全7伤+1易伤","uDesc":"全8伤+2易伤","_char":"regent"},{"id":"newMoon","name":"新月","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"6伤;耗1辉星+20伤(总26)+抽1","uDesc":"8伤;耗1辉星+28伤(总36)+抽2","_char":"regent"},{"id":"starShield","name":"群星之盾","c":"1","type":"skill","rarity":"common","target":"self","desc":"12甲;耗1辉星+18甲+抽1(总30)","uDesc":"16甲;耗1辉星+26甲+抽1(总42)","_char":"regent"},{"id":"comet","name":"彗星","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"10伤;耗2辉星再打2次+抽1(总30)","uDesc":"14伤;耗1辉星再打2次+抽1(总42)","_char":"regent"},{"id":"nova","name":"超新星","c":"-1","type":"attack","rarity":"rare","target":"all","desc":"X费:全7伤xX","uDesc":"X费:全10伤xX","_char":"regent"},{"id":"starReap","name":"星之收割","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"8伤;耗2辉星回16HP","uDesc":"12伤;耗1辉星回20HP+抽1","_char":"regent"},{"id":"infiniteRadiance","name":"无尽光辉","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:回合每辉星+1甲;获5辉星","uDesc":"能力:回合每辉星+1甲;获5辉星","_char":"regent"},{"id":"forgeBlade","name":"淬炼刀刃","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"12伤;铸剑6","uDesc":"20伤;铸剑10","_char":"regent"},{"id":"spoilsOfWar","name":"战利品","c":"1","type":"skill","rarity":"common","target":"self","desc":"铸剑15;消耗","uDesc":"铸剑25;消耗","_char":"regent"},{"id":"forgeWall","name":"铸墙","c":"1","type":"skill","rarity":"common","target":"self","desc":"16甲;铸剑6","uDesc":"26甲;铸剑10","_char":"regent"},{"id":"battleForged","name":"战火铸就","c":"2","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始铸剑2","uDesc":"能力:回合始铸剑3+3甲","_char":"regent"},{"id":"conqueror","name":"征服者","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"铸剑数x5伤(上限20);铸剑+3;消耗","uDesc":"铸剑数x8伤(上限25);铸剑+5;消耗","_char":"regent"},{"id":"recallBlade","name":"征召上前","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"回收王刃+铸剑8;抽1","uDesc":"回收王刃+铸剑12;抽2","_char":"regent"},{"id":"smelt","name":"熔炉","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合铸剑1+3甲","uDesc":"能力:回合铸剑2+6甲","_char":"regent"},{"id":"loyalServant","name":"忠仆","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"10伤;+4仆从(9甲)","uDesc":"16伤;+5仆从(13甲)","_char":"regent"},{"id":"servantStrike","name":"仆从打击","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"仆从数x7伤","uDesc":"仆从数x10伤","_char":"regent"},{"id":"royalGuard","name":"皇家卫队","c":"1","type":"skill","rarity":"common","target":"self","desc":"+5仆从;每仆从+8甲","uDesc":"+8仆从;每仆从+10甲","_char":"regent"},{"id":"servantWave","name":"仆从潮","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"仆从数x7全体伤","uDesc":"仆从数x12全体伤","_char":"regent"},{"id":"reinforce","name":"增援","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"+6仆从;抽1;消耗","uDesc":"+10仆从;抽2;消耗","_char":"regent"},{"id":"grandArmy","name":"大军","c":"-1","type":"power","rarity":"rare","target":"self","desc":"X费:X仆从;每仆从+1甲","uDesc":"X费:X+1仆从;每仆从+2甲","_char":"regent"},{"id":"servantSacrifice","name":"仆从牺牲","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"耗2仆从:+1能+抽2+3甲;消耗","uDesc":"耗2仆从:+2能+抽3+5甲;消耗","_char":"regent"},{"id":"servantFortress","name":"仆从堡垒","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:回合每仆从+2甲;+2仆从","uDesc":"能力:回合每仆从+3甲;+3仆从","_char":"regent"},{"id":"prismaticStar","name":"棱彩之星","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"14伤;获1外来(费-1)+2辉星","uDesc":"20伤;获1外来(费-2)+3辉星+抽1","_char":"regent"},{"id":"cosmicTide","name":"宇宙潮汐","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"抽2;弃1;+1辉星;消耗","uDesc":"抽3;弃1;+2辉星;消耗","_char":"regent"},{"id":"starBlessing","name":"星之祝福","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始+3辉星+抽1","uDesc":"能力:回合始+3辉星+抽1+1甲","_char":"regent"},{"id":"bigBang","name":"大爆炸","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"+1能;+4辉星;消耗","uDesc":"+2能;+6辉星;抽1;消耗","_char":"regent"},{"id":"whosDare","name":"何人僭越","c":"1","type":"skill","rarity":"common","target":"self","desc":"全体1虚+1易+2辉星;消耗","uDesc":"全体2虚+2易+3辉星+抽1;消耗","_char":"regent"},{"id":"protectKing","name":"护驾","c":"1","type":"skill","rarity":"common","target":"self","desc":"消耗1张牌;+8甲","uDesc":"消耗1张牌;+12甲+抽1","_char":"watcher"},{"id":"starPower","name":"星辰之力","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始耗3辉星+1力量","uDesc":"能力:回合始耗2辉星+1力量+抽1","_char":"regent"},{"id":"forgeSacrifice","name":"剑之献祭","c":"0","type":"skill","rarity":"common","target":"self","desc":"消耗1手牌;铸剑+4","uDesc":"消耗1手牌;铸剑+10","_char":"regent"},{"id":"servantPhalanx","name":"仆从方阵","c":"1","type":"skill","rarity":"common","target":"self","desc":"每仆从+2甲","uDesc":"每仆从+3甲+抽1","_char":"regent"},{"id":"starBlade","name":"星刃","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"耗2辉星获3升级小刀+抽1","uDesc":"耗1辉星获4升级小刀+抽1+2甲","_char":"regent"},{"id":"poisonForge","name":"淬毒铸剑","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"8伤+2毒;铸剑1","uDesc":"11伤+3毒;铸剑2","_char":"regent"},{"id":"starVortex","name":"星系漩涡","c":"0","type":"skill","rarity":"common","target":"self","desc":"耗1辉星抽4+5甲","uDesc":"耗1辉星抽4+8甲+回1能","_char":"regent"},{"id":"servantPower","name":"仆从之力","c":"0","type":"skill","rarity":"common","target":"self","desc":"耗1仆从+2力量;消耗","uDesc":"耗1仆从+3力量;消耗","_char":"regent"},{"id":"echoStar","name":"宇宙回响","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"获1随机球;每3辉星+1球","uDesc":"获1随机球;每2辉星+1球+抽1","_char":"regent"},{"id":"starShieldPassive","name":"辉星护盾","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始每5辉星+2甲","uDesc":"能力:回合始每3辉星+2甲+1甲","_char":"regent"},{"id":"forgeRecall","name":"铸剑回收","c":"1","type":"skill","rarity":"common","target":"self","desc":"从弃牌堆回收1张非攻击牌","uDesc":"回收1张+铸剑1","_char":"regent"},{"id":"servantHeal","name":"仆从治疗","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"消耗2仆从回复6HP","uDesc":"消耗1仆从回复8HP","_char":"regent"},{"id":"forgeStar","name":"铸星","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"铸剑5→获3辉星+抽1","uDesc":"铸剑8→获5辉星+抽2","_char":"regent"},{"id":"starBomb","name":"星爆弹","c":"2","type":"attack","rarity":"rare","target":"all","desc":"全12伤;消耗所有辉星每1+4伤","uDesc":"全16伤;消耗所有辉星每1+6伤","_char":"regent"},{"id":"forgeArmor","name":"铸甲术","c":"1","type":"skill","rarity":"common","target":"self","desc":"铸剑3→+12甲+抽1","uDesc":"铸剑3→+18甲+抽1+回1能","_char":"regent"},{"id":"forgeServant","name":"铸令","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"铸剑5→+3仆从+5甲","uDesc":"铸剑4→+5仆从+8甲+抽1","_char":"regent"},{"id":"forgeHeart","name":"铸心","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"铸剑6→回12HP+3甲","uDesc":"铸剑5→回18HP+5甲+抽1","_char":"regent"},{"id":"royalDecree","name":"王令","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合首张外来牌费用-1;获得2辉星","uDesc":"能力:回合首张外来牌费用-2;获得3辉星+抽1","_char":"regent"},{"id":"starForge","name":"星辰熔炉","c":"-1","type":"attack","rarity":"rare","target":"enemy","desc":"X费:全7伤xX;每无色牌+2伤","uDesc":"X费:全11伤xX;每无色牌+3伤","_char":"regent"},{"id":"everChange","name":"万变","c":"0","type":"skill","rarity":"rare","target":"self","desc":"复制弃牌堆1张;原卡本战升级-1费;消耗","uDesc":"复制弃牌堆1张(升级-1费);原卡升级-2费;消耗","_char":"regent"},{"id":"decreePower","name":"王权威仪","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:回合始获得1临时力+1甲,每有1张外来牌+1","uDesc":"能力:回合始获得1临时力+2甲,每张外来牌+2","_char":"regent"},{"id":"sevenStars","name":"七星","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"7伤x7;每耗1辉星+1段","uDesc":"10伤x7;每耗1辉星+1段","_char":"regent"},{"id":"gammaBurst","name":"伽马爆破","c":"1","type":"skill","rarity":"rare","target":"self","desc":"消耗所有辉星;每2辉星全5伤+抽1","uDesc":"消耗所有辉星;每1辉星全6伤+抽1","_char":"watcher"},{"id":"coreImpact","name":"星核冲击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"16伤;耗1辉星+14伤(总30)","uDesc":"22伤;耗1辉星+20伤(总42)","_char":"regent"},{"id":"radiantBarrier","name":"星辉屏障","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"14甲;耗1辉星+16甲+抽1(总30)","uDesc":"18甲;耗1辉星+22甲+抽1(总40)","_char":"regent"},{"id":"gravityWell","name":"引力井","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"全体2易+2虚;耗2辉星+全体2毒+抽2","uDesc":"全体4易+4虚;耗1辉星+全体3毒+抽3","_char":"defect"},{"id":"stellarBurst","name":"星之爆发","c":"0","type":"skill","rarity":"rare","target":"self","desc":"耗4辉星:+3能+抽3+12甲;消耗","uDesc":"耗3辉星:+4能+抽4+18甲;消耗","_char":"regent"},{"id":"starOrbit","name":"星轨","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始耗1辉星+7甲+随机敌7伤","uDesc":"能力:回合始耗1辉星+10甲+随机敌10伤+抽1","_char":"regent"},{"id":"trackingBlade","name":"追踪之刃","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"10伤;铸剑1;若击杀返回手牌","uDesc":"15伤;铸剑2;若击杀返回手牌","_char":"regent"},{"id":"starFlow","name":"星能涌动","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:每张牌+1辉星(辉星牌+2)","uDesc":"能力:每张牌+2辉星(辉星牌+3)+4甲","_char":"defect"},{"id":"chaosTide","name":"混沌潮汐","c":"2","type":"attack","rarity":"rare","target":"all","desc":"[固有]战起上手|[基础费]2能+随机消耗1牌+本回每多打1次+1能|[潮汐]Lv+1(上10跨战保满-5)|[相位]0涌Lv|1回Lv/2+抽1+1能|2怒Lv+3+Lv×3甲+双交+费+1|[回响]前牌:攻→交×1.5|技→+Lv×3甲|能→1能+抽1|[潮池]持牌期每1牌+1池,池×Lv全伤|[交叉]每1其他攻+Lv全伤|[溢满]Lv>=5→[涌]+1能|[满潮]Lv=10→全10毒+10刺+抽5+Lv-5|[暗流]持牌期每攻击+Lv/3伤|[回响]Lv3解锁:每回合首技能-1费|Lv6解锁:每回合首攻+3伤|Lv9解锁:回合始抽1|[过载]费后能≤0追:涌+6甲|回+1能|怒全5伤","uDesc":"[固有]上手|[费用]2能+消1牌+本回每多1+1能|[潮汐]Lv+1(上10)|[相位]0:Lv+1|1:Lv/2抽2+1能|2:Lv+3+Lv×2甲+双交+费+1|[回响]攻→交×2|技→+Lv×4甲|能→1能+抽2|[潮池]池×(Lv+1)全伤|[交叉]每1攻+Lv×2全伤|[溢满]Lv>=4→[涌]+1能(每3Lv多1张)|[满潮]Lv=10→全15毒+15刺+抽6+Lv-5|[暗流]+Lv/3攻伤|[回响]Lv3:首技-1|Lv6:首攻+3|Lv9:回始抽1|[过载]能≤0:涌+6甲|回+1能|怒全6伤","_char":"defect"},{"id":"tideSurge","name":"潮汐·涌","c":"0","type":"attack","rarity":"basic","target":"enemy","desc":"Lv×2伤;打出后Lv+1","uDesc":"Lv×3伤;打出后Lv+1+回1能","_char":"neutral"},{"id":"whirlwindSlash","name":"回旋斩","c":"1","type":"attack","rarity":"common","target":"all","desc":"全8伤+每击中1甲","uDesc":"对所有敌人造成12点伤害+1易伤","_char":"ironclad"},{"id":"volcanicEruption","name":"火山喷发","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"对所有敌人造成12点伤害;击杀+2力量","uDesc":"对所有敌人造成16点伤害;击杀+3力量","_char":"ironclad"},{"id":"chainLightning","name":"连锁闪电","c":"1","type":"attack","rarity":"uncommon","target":"all","desc":"对所有敌人造成6点伤害;每击中1个+2伤","uDesc":"对所有敌人造成9点伤害;每击中1个+3伤","_char":"ironclad"},{"id":"chargeBlow","name":"蓄力重拳","c":"3","type":"attack","rarity":"rare","target":"enemy","desc":"造成32点伤害;每有1点力量额外造成4点伤害","uDesc":"造成40点伤害;每有1点力量额外造成5点伤害;获得等量格挡","_char":"ironclad"},{"id":"weakStrike","name":"弱点突袭","c":"0","type":"attack","rarity":"rare","target":"enemy","desc":"造成6点伤害;若敌人有易伤额外造成14点伤害;消耗","uDesc":"造成10点伤害;若敌人有易伤额外造成20点伤害;消耗","_char":"neutral"},{"id":"dangerSense","name":"危机预感","c":"0","type":"skill","rarity":"rare","target":"self","desc":"获得1点敏捷;抽1张牌;消耗","uDesc":"获得2点敏捷;抽1张牌;获得4点格挡;消耗","_char":"neutral"},{"id":"allOrNothing","name":"孤注一掷","c":"-1","type":"skill","rarity":"rare","target":"self","desc":"消耗X点能量:造成X*6点伤害到随机敌人;获得X点力量(本回合)","uDesc":"消耗X点能量:造成X*8点伤害到随机敌人;获得X点力量(本回合)+抽1","_char":"neutral"},{"id":"warTotem","name":"战争图腾","c":"3","type":"power","rarity":"rare","target":"self","desc":"能力:回合开始时获得2点力量和3层金属化;获得8点格挡","uDesc":"能力:回合开始时获得3点力量和5层金属化;获得12点格挡","_char":"ironclad"},{"id":"fightInstinct","name":"战斗本能","c":"0","type":"power","rarity":"rare","target":"self","desc":"能力:每回合第一张攻击牌费用-1;虚无","uDesc":"能力:每回合第一张攻击牌费用-1+额外造成3点伤害;虚无","_char":"ironclad"},{"id":"earthShatter","name":"裂地斩","c":"3","type":"attack","rarity":"rare","target":"all","desc":"对所有敌人造成18点伤害;全体获得2层易伤","uDesc":"对所有敌人造成24点伤害;全体获得3层易伤+获得6点格挡","_char":"ironclad"},{"id":"spinningEdge","name":"回旋刃","c":"0","type":"attack","rarity":"uncommon","target":"all","desc":"全5伤;本回每打过1牌+2伤","uDesc":"全8伤;本回每打过1牌+3伤+抽1","_char":"ironclad"},{"id":"soulResonance","name":"灵魂共鸣","c":"-1","type":"power","rarity":"rare","target":"self","desc":"消耗X点能量:获得X点力量;抽X张牌","uDesc":"消耗X点能量:获得X+1点力量;抽X张牌;获得X*3点格挡","_char":"ironclad"},{"id":"timeShield","name":"时间护盾","c":"3","type":"skill","rarity":"rare","target":"self","desc":"获得22点格挡;下回合开始额外获得10点格挡;抽2张牌","uDesc":"获得30点格挡;下回合开始额外获得15点格挡;抽3张牌","_char":"neutral"},{"id":"chaosGambit","name":"混沌弃牌","c":"-1","type":"skill","rarity":"rare","target":"self","desc":"X费:弃X张牌;每弃1张抽2张+获得2点格挡","uDesc":"X费:弃X张牌;每弃1张抽3张+获得3点格挡+获得1点能量","_char":"defect"},{"id":"ironWill","name":"钢铁意志","c":"3","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合开始时获得2层金属化;获得12点格挡","uDesc":"能力:回合开始时获得3层金属化+1点力量;获得16点格挡","_char":"ironclad"},{"id":"sacrificePower","name":"献祭之力","c":"-1","type":"power","rarity":"uncommon","target":"self","desc":"X费:失去X*2点生命;获得X点力量;获得X*3点格挡","uDesc":"X费:失去X*2点生命;获得X+1点力量;获得X*4点格挡;抽X张牌","_char":"ironclad"},{"id":"natureForce","name":"自然之力","c":"3","type":"power","rarity":"uncommon","target":"self","desc":"能力:每回合获得1点能量;获得4点格挡","uDesc":"能力:每回合获得1点能量+抽1张牌;获得6点格挡","_char":"ironclad"},{"id":"energyShield","name":"能量护盾","c":"-1","type":"power","rarity":"uncommon","target":"self","desc":"X费:获得X*6点格挡;集中+1","uDesc":"X费:获得X*8点格挡;集中+2;获得1点能量","_char":"defect"},{"id":"shadowPact","name":"暗影契约","c":"3","type":"power","rarity":"uncommon","target":"self","desc":"能力:每回合第一张攻击牌+6伤害;第一张技能牌+5格挡","uDesc":"能力:每回合第一张攻击牌+9伤害;第一张技能牌+8格挡+抽1","_char":"ironclad"},{"id":"timeWarp","name":"时间扭曲","c":"-1","type":"power","rarity":"uncommon","target":"self","desc":"X费:获得X点敏捷;获得X*2点格挡;抽1张牌","uDesc":"X费:获得X+1点敏捷;获得X*3点格挡;抽2张牌","_char":"neutral"},{"id":"roulette","name":"俄罗斯轮盘","c":"2","type":"skill","rarity":"common","target":"self","desc":"轮盘6 chamber:1自5|2-3全10|4-5全18|6全28+2能","uDesc":"轮盘:1自6|2-3全14|4-5全24|6全36+3能+抽2","_char":"ironclad"},{"id":"luckySeven","name":"幸运七","c":"2","type":"skill","rarity":"common","target":"self","desc":"投两枚骰子(1-6)!和<7:6甲;≥7:全8伤+8甲;=7:全14伤+14甲!","uDesc":"投骰子!和<7:10甲;≥7:全12伤+12甲;=7:全20伤+20甲+抽2!","_char":"ironclad"},{"id":"dealer","name":"庄家","c":"3","type":"skill","rarity":"common","target":"self","desc":"将3张随机牌(费-1)洗入抽牌堆;抽1;消耗","uDesc":"将4张随机牌(费-2)洗入;抽2;消耗","_char":"ironclad"},{"id":"ditto","name":"百变怪","c":"1","type":"skill","rarity":"rare","target":"self","desc":"变形!复制上一张打出的牌(0费);消耗","uDesc":"变形!复制上一张牌(0费+增强);消耗","_char":"neutral"},{"id":"weatherRand","name":"随机天气","c":"3","type":"skill","rarity":"uncommon","target":"self","desc":"随机天气:①雷+2能②雹全10伤③雾+12甲④风抽3","uDesc":"随机:①雷+3能②雹全15伤③雾+18甲④风抽4","_char":"neutral"},{"id":"surpriseBox","name":"惊喜箱","c":"-1","type":"skill","rarity":"common","target":"self","desc":"X费:随机→金/X力/X甲/治疗","uDesc":"X费:随机→金/X+1力/X甲/治疗+抽X","_char":"ironclad"},{"id":"voidStrike","name":"虚空打击","c":"1","type":"attack","rarity":"common","target":"enemy","desc":"9伤;消耗2印记额外+8伤","uDesc":"13伤;消耗2印记额外+12伤","_char":"ironclad"},{"id":"voidNova","name":"虚空新星","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"消耗所有印记;每印记4伤","uDesc":"消耗所有印记;每印记6伤","_char":"ironclad"},{"id":"voidFissure","name":"虚空裂隙","c":"2","type":"attack","rarity":"rare","target":"all","desc":"消耗所有印记;每印记全5伤+2甲","uDesc":"消耗所有印记;每印记全8伤+3甲","_char":"neutral"},{"id":"mirrorShard","name":"碎片反射","c":"0","type":"skill","rarity":"common","target":"self","desc":"6甲+2反射;反射=每层+1甲","uDesc":"10甲+3反射;反射=每层+2甲+抽1","_char":"neutral"},{"id":"mirrorWall","name":"镜面壁垒","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"8甲;反射≥3→+6甲+抽1","uDesc":"12甲;反射≥2→+8甲+抽2","_char":"neutral"},{"id":"tideFlow","name":"潮汐流","c":"0","type":"attack","rarity":"common","target":"enemy","desc":"6伤;+1潮汐等级;+4伤(已有潮汐)","uDesc":"10伤;+2潮汐等级;+6伤(已有潮汐)","_char":"neutral"},{"id":"tideMemory","name":"潮汐记忆","c":"0","type":"skill","rarity":"common","target":"self","desc":"回放上次潮汐相位并复制其效果(不消耗);消耗","uDesc":"回放上次潮汐相位并复制其效果(效果+50%);消耗","_char":"neutral"},{"id":"rageTide","name":"怒潮","c":"2","type":"attack","rarity":"uncommon","target":"all","desc":"潮汐等级×5全体伤;+2潮汐等级","uDesc":"潮汐等级×7全体伤;+3潮汐等级;抽1","_char":"neutral"},{"id":"tideAmulet","name":"潮汐护符","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始+潮汐等级甲;+1潮汐等级","uDesc":"能力:回合始+潮汐等级×2甲;+2潮汐等级;抽1","_char":"neutral"},{"id":"tideVortex","name":"潮汐漩涡","c":"2","type":"skill","rarity":"rare","target":"self","desc":"消耗所有潮汐等级;每级全3伤+3甲+回1血","uDesc":"消耗所有潮汐等级;每级全5伤+5甲+回2血+抽1","_char":"neutral"},{"id":"eclecticStudy","name":"博采众长","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:回合始+1张异职业稀有卡(费-1)","uDesc":"能力:回合始+1张异职业稀有卡(费-2);抽1","_char":"neutral"},{"id":"knowledgeTheft","name":"知识窃取","c":"1","type":"skill","rarity":"uncommon","target":"self","desc":"看3张异职业卡,选1入手(本战费-1);消耗","uDesc":"看4张异职业卡,选1入手(本战费-2)+3甲;消耗","_char":"neutral"},{"id":"synergyStrike","name":"协同打击","c":"1","type":"attack","rarity":"uncommon","target":"all","desc":"全5伤;本战每获得过1张异职业卡+3伤","uDesc":"全8伤;本战每获得过1张异职业卡+5伤+2甲","_char":"neutral"},{"id":"classShift","name":"职业转换","c":"0","type":"skill","rarity":"rare","target":"self","desc":"从弃牌堆回收1张异职业卡入手;消耗","uDesc":"从弃牌堆回收1张异职业卡入手(费-1);消耗","_char":"neutral"},{"id":"crossFertilize","name":"异花授粉","c":"0","type":"skill","rarity":"common","target":"self","desc":"随机1张异职业攻击+1张异职业技能;消耗","uDesc":"随机2张异职业卡(不限稀有);消耗","_char":"silent"},{"id":"universalInsight","name":"洞悉万象","c":"1","type":"power","rarity":"uncommon","target":"self","desc":"能力:获得1个副职业;回合始+3甲","uDesc":"能力:获得1个副职业;回合始+6甲+抽1","_char":"neutral"},{"id":"echoOther","name":"他山之石","c":"0","type":"skill","rarity":"uncommon","target":"self","desc":"弃1张手牌;从副职业随机1张牌入手(本战费-2);消耗","uDesc":"弃1张手牌;从副职业随机1张牌入手(本战费-3)+3甲;消耗","_char":"neutral"},{"id":"chargedStrike","name":"蓄势一击","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"8伤;每剩余能量+3伤(上限+15);消耗","uDesc":"12伤;每剩余能量+4伤(上限+20);消耗","_char":"ironclad"},{"id":"countdownStrike","name":"命悬一线","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"12伤;手牌每保留1回+15伤","uDesc":"18伤;手牌每保留1回+20伤","_char":"ironclad"},{"id":"loanStrike","name":"透支未来","c":"0","type":"attack","rarity":"uncommon","target":"enemy","desc":"0费:抽1;自伤2;上限+1伤(全局永久);消耗","uDesc":"0费:抽1;自伤2;上限+2伤(全局永久);消耗","_char":"ironclad"},{"id":"boomerangStrike","name":"回旋镖","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"7伤;回合末返回手牌","uDesc":"10伤;回合末返回手牌+抽1","_char":"ironclad"},{"id":"sacrificialStrike","name":"燃命","c":"1","type":"attack","rarity":"rare","target":"enemy","desc":"10伤;自伤2;本回每再出1牌触发1次(限2次)","uDesc":"14伤;自伤2;每再出1牌触发1次(限3次)","_char":"ironclad"},{"id":"investmentStrike","name":"增值","c":"1","type":"attack","rarity":"rare","target":"enemy","desc":"4伤;全局每用1次+3伤(永久)","uDesc":"6伤;全局每用1次+4伤+抽1","_char":"ironclad"},{"id":"timeStopStrike","name":"凝时","c":"3","type":"attack","rarity":"rare","target":"enemy","desc":"7伤;敌人跳过下回合(限1次)","uDesc":"10伤;敌人跳过下回+全敌易伤;消耗","_char":"ironclad"},{"id":"barrageStrike","name":"百裂拳","c":"-1","type":"attack","rarity":"uncommon","target":"all","desc":"X费:随机敌4伤X次","uDesc":"X费:随机敌6伤X次+全体1易伤","_char":"ironclad"},{"id":"emptyHand","name":"空手道","c":"0","type":"skill","rarity":"rare","target":"self","desc":"手牌为空时:抽3+3能;虚无","uDesc":"手牌为空时:抽4+4能+4甲;虚无","_char":"ironclad"},{"id":"goldStrike","name":"金币打击","c":"1","type":"attack","rarity":"rare","target":"enemy","desc":"6伤;每10金+1伤(上限+12);不花钱","uDesc":"10伤;每8金+1伤(上限+18)+抽1","_char":"ironclad"},{"id":"weightTraining","name":"负重训练","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:受伤+2;回合始+2力","uDesc":"能力:受伤+2;回合始+3力+3甲","_char":"ironclad"},{"id":"waitAndSee","name":"以逸待劳","c":"0","type":"skill","rarity":"rare","target":"self","desc":"跳过下次抽牌;再下次多抽4;消耗","uDesc":"跳过下次抽牌;再下次多抽5+3甲;消耗","_char":"ironclad"},{"id":"burnBoats","name":"破釜沉舟","c":"0","type":"skill","rarity":"rare","target":"self","desc":"消耗所有手牌;每张+3甲;+2能;抽2","uDesc":"消耗所有手牌;每张+4甲;+3能;抽3+再抽1","_char":"ironclad"},{"id":"knowledgePower","name":"知识就是力量","c":"0","type":"attack","rarity":"rare","target":"enemy","desc":"4伤;弃牌堆不同牌名x1伤(上限15)","uDesc":"6伤;弃牌堆不同牌名x2伤(上限20)","_char":"ironclad"},{"id":"equivalentExchange","name":"等价交换","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:3回内受伤=回血,回血=受伤","uDesc":"能力:4回内受伤=回血,回血=受伤","_char":"ironclad"},{"id":"disrupt","name":"扰乱","c":"1","type":"skill","rarity":"rare","target":"self","desc":"重置所有敌人意图;每重置1个+3甲","uDesc":"重置所有敌人意图;每重置1个+6甲+抽1","_char":"silent"},{"id":"readAndCounter","name":"见招拆招","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"9伤;若敌本回攻击过+敌攻击力伤","uDesc":"14伤;若敌本回攻击过+敌攻击力x2伤","_char":"ironclad"},{"id":"tacticalDefense","name":"见招拆盾","c":"1","type":"skill","rarity":"common","target":"self","desc":"每个攻击过的敌+4甲","uDesc":"每个攻击过的敌+6甲+抽1","_char":"ironclad"},{"id":"aftermathStrike","name":"后发制人","c":"2","type":"attack","rarity":"uncommon","target":"enemy","desc":"10伤;若敌将不攻击+8伤(破盾)","uDesc":"16伤;若敌将不攻击双倍并破盾","_char":"ironclad"},{"id":"battleInsight","name":"洞察先机","c":"2","type":"skill","rarity":"rare","target":"self","desc":"看该敌意图;攻击+8甲;防御+3能;消耗","uDesc":"看该敌意图;攻击+12甲;防御+4能+抽1;消耗","_char":"ironclad"},{"id":"bloodStarStrike","name":"血星","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"10伤;自残2;获2辉星","uDesc":"15伤;自残2;获4辉星+2甲","_char":"ironclad"},{"id":"poisonStrStrike","name":"毒力拳","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"7伤+3毒;获1临时力","uDesc":"10伤+5毒;获2临时力+2甲","_char":"ironclad"},{"id":"discardMantraStrike","name":"弃念击","c":"1","type":"attack","rarity":"uncommon","target":"enemy","desc":"8伤;弃1牌+2念力","uDesc":"12伤;弃1牌(选)+3念力+2甲","_char":"ironclad"},{"id":"forgeShivStrike","name":"铸刃斩","c":"1","type":"attack","rarity":"common","target":"all","desc":"全5伤;消耗2铸剑;获2小刀","uDesc":"全8伤;消耗2铸剑;获3升级小刀+抽1","_char":"regent"},{"id":"scrawl","name":"启示","c":"1","type":"skill","rarity":"rare","target":"self","desc":"抽3张;消耗","uDesc":"抽3张;本回手牌费-1;消耗","_char":"watcher"},{"id":"rollingBoulder","name":"滚石","c":"2","type":"power","rarity":"rare","target":"self","desc":"能力:回合始全6伤;每回合+6","uDesc":"能力:回合始全6伤;每回+6;附加1易伤","_char":"neutral"},{"id":"automation","name":"自动化","c":"1","type":"power","rarity":"rare","target":"self","desc":"能力:每抽5牌+1能","uDesc":"能力:每抽5牌+1能;溢出能保留1到下一回","_char":"neutral"},{"id":"blackHole","name":"黑洞","c":"-1","type":"attack","rarity":"rare","target":"all","desc":"X费:消耗X辉星;每辉星全6伤","uDesc":"X费:消耗X辉星;每辉星全8伤;余辉星退1能","_char":"neutral"},{"id":"stardust","name":"星尘","c":"1","type":"power","rarity":"common","target":"self","desc":"能力:回合始+1辉星+2甲","uDesc":"能力:回合始+2辉星+3甲;固有","_char":"regent"},{"id":"doomStrike","name":"厄运打击","c":"2","type":"attack","rarity":"rare","target":"enemy","desc":"10伤;施加12层厄运(x3≥HP→灭)","uDesc":"15伤;施加12层厄运;击杀时厄运扩散;消耗","_char":"neutral"}],"relics":[{"id":"divineRight","name":"天赋君权","desc":"每场战斗获得3辉星;战斗后回复5HP(储君)"},{"id":"forgeCore","name":"铸剑核心","desc":"每场战斗开始获得君王之剑;铸剑额外+1层(储君·铸剑流)"},{"id":"servantBanner","name":"仆从之旗","desc":"战斗开始+2仆从;每4回合+1仆从(储君·仆从流)"},{"id":"prismCore","name":"棱彩核心","desc":"首张外来牌费用-1;每战首次获外来牌抽1(储君·无色流)"},{"id":"burningBlood","name":"燃烧之血","desc":"战斗后回复10HP(铁甲)"},{"id":"ringSnake","name":"蛇之戒","desc":"首回合+1能+2抽(静默)"},{"id":"pureWater","name":"净水","desc":"最大能量+1(观者)"},{"id":"crackedCore","name":"裂变核心","desc":"开局2闪电球(机兵)"},{"id":"dataDisk","name":"数据盘","desc":"获得时集中+3;战斗开始集中+1"},{"id":"vajra","name":"金刚杵","desc":"每场战斗开始时获得2点力量"},{"id":"bagPrep","name":"准备袋","desc":"每场战斗首回合多抽2张牌"},{"id":"oddStone","name":"光滑石头","desc":"每回合合+2点敏捷捷"},{"id":"orichalcum","name":"山铜","desc":"回合末若无格挡则获得6格挡"},{"id":"happyFlower","name":"快乐花","desc":"每3回合获得1点能量上限"},{"id":"anchor","name":"船锚","desc":"每场战斗首回合+10格挡"},{"id":"strawberry","name":"草莓","desc":"永久+8最大生命值"},{"id":"centennial","name":"百年拼图","desc":"首回合第一次抽牌额外+1张"},{"id":"shuriken","name":"手里剑","desc":"每打出3张攻击牌+1力量(限每回合1次)"},{"id":"kunai","name":"苦无","desc":"每打出3张攻击牌+8格挡"},{"id":"clay","name":"自成形粘土","desc":"每次受伤+3甲;若受伤≥10额外+3"},{"id":"paperKrane","name":"纸鹤","desc":"敌方的虚弱效果翻倍(减伤50%)"},{"id":"nunchaku","name":"双节棍","desc":"每打出2张攻击牌+1能量(回合末消失)"},{"id":"toughBelt","name":"坚韧腰带","desc":"回合+3甲;回合首张抽牌降低1费"},{"id":"marbles","name":"弹珠袋","desc":"战斗开始时全体敌人获得1层易伤"},{"id":"redSkull","name":"红骷髅","desc":"生命值≤50%时获得3点力量"},{"id":"artOfWar","name":"兵书","desc":"若上回合未打出攻击,本回合+1点能量"},{"id":"penNib","name":"笔尖","desc":"每打出打击8次攻击,下张攻击翻倍"},{"id":"top","name":"不停陀螺","desc":"回合末手牌为空则抽1张牌"},{"id":"deadBranch","name":"死灵书","desc":"消耗牌时获得1张随机卡牌"},{"id":"gremlinHorn","name":"地精角","desc":"敌人死亡时抽1张牌+1点能量"},{"id":"hourglass","name":"水银沙漏","desc":"每回合合结束时所有敌人受5点伤害"},{"id":"mummyHand","name":"木乃伊手","desc":"打出能力牌时随机1张手牌费用降低1点"},{"id":"whiteBeast","name":"白兽雕像","desc":"战斗后必定获得1瓶药水"},{"id":"bell","name":"铃铛","desc":"每3回合获得1点力量+3甲"},{"id":"ink","name":"墨水","desc":"每打出3张牌抽1张牌"},{"id":"stove","name":"暖炉","desc":"每3回合回复8点生命"},{"id":"ancientCoin","name":"古钱币","desc":"获得时增加150金币"},{"id":"strikeDummy","name":"打击木桩","desc":"所有打击牌+4点伤害"},{"id":"theBoot","name":"铁靴","desc":"攻击对HP≤50%敌人额外造成8点伤害"},{"id":"sundial","name":"日晷","desc":"每洗牌打击3次获得2点能量"},{"id":"bloodVial","name":"血瓶","desc":"每场战斗开始回复8血;血量<50%回复12"},{"id":"meatBone","name":"骨肉","desc":"战斗结束HP≤50%时回复15血+2甲"},{"id":"bottledFlame","name":"火焰瓶","desc":"战斗开始时获得1点能量"},{"id":"lantern","name":"煤灯","desc":"首回合+1点能量"},{"id":"sutra","name":"经书","desc":"每回合合第一次抽牌额外抽1张"},{"id":"whetstone","name":"磨刀石","desc":"获得时随机升级2张攻击牌"},{"id":"polishedArmor","name":"抛光铠甲","desc":"战斗开始+12甲+抽1张牌"},{"id":"poisonBottle","name":"毒药瓶","desc":"战斗开始对首个敌人施加3层毒"},{"id":"warHorn","name":"战争号角","desc":"战斗开始+3点力量持续3回合"},{"id":"shieldGen","name":"护盾发生器","desc":"每回合合首次受伤减少5点"},{"id":"championBelt","name":"冠军腰带","desc":"战斗开始时敌人获得易伤+虚弱"},{"id":"hornCleat","name":"角钉","desc":"每场战斗开始时获得14点格挡"},{"id":"turnip","name":"萝卜","desc":"免疫虚弱;回合开始+2力量"},{"id":"ginger","name":"生姜","desc":"免疫易伤;回合开始+4格挡"},{"id":"fruitJuice","name":"果汁","desc":"永久+8最大生命值"},{"id":"runicPyramid","name":"符文金字塔","desc":"回合结束时不弃牌(保留所有手牌)"},{"id":"prismatic","name":"万花筒碎片","desc":"卡牌奖励不再限制角色(全职业混搭)"},{"id":"tungstenRod","name":"钨棒","desc":"每次受到伤害减少1点"},{"id":"torii","name":"鸟居","desc":"受到≤5的伤害降为1"},{"id":"preservedInsect","name":"压制昆虫","desc":"精英怪物HP-25%"},{"id":"handDrill","name":"手钻","desc":"敌人的易伤效果翻倍(受伤+100%)"},{"id":"strangeSpoon","name":"神秘勺子","desc":"消耗牌有50%概率不消耗"},{"id":"pocketwatch","name":"怀表","desc":"手牌≤3张时抽到6张"},{"id":"tingsha","name":"清沙","desc":"每弃1张牌对随机敌人造成3点伤害"},{"id":"wristBlade","name":"腕刃","desc":"0费攻击牌伤害+4"},{"id":"singingBowl","name":"歌铃碗","desc":"选择奖励卡时+2最大生命值"},{"id":"specimen","name":"样本","desc":"中毒敌人死亡时将中毒转移"},{"id":"ironThorn","name":"铁棘甲","desc":"获得格挡时对所有敌人造成1点伤害"},{"id":"vitalSpring","name":"活力之泉","desc":"回复生命时获得1点能量"},{"id":"toxinSack","name":"毒囊","desc":"攻击牌施加1层中毒"},{"id":"energyTalisman","name":"能量护符","desc":"进入姿态时+3点格挡抽1张"},{"id":"iceCream","name":"冰淇淋","desc":"回合末保留50%剩余能量"},{"id":"frozenCore","name":"冰核","desc":"回合开始生成1冰霜球(替换裂变核心)"},{"id":"goldPlatedCables","name":"镀金缆线","desc":"等离子球额外+2点能量;每战首回生1等离子"},{"id":"emotionChip","name":"情感芯片","desc":"每回合合首次激发时额外触发打击1次"},{"id":"symbiosis","name":"共生","desc":"战斗开始生成1暗黑球"},{"id":"nuclearBattery","name":"核能电池","desc":"每场战斗首回合+1点能量;获得时集中+2;每战集中+1"},{"id":"ornamentalFan","name":"饰品扇","desc":"每打出3张攻击牌获得6点格挡"},{"id":"duVuDoll","name":"嘟-V玩偶","desc":"牌组中每有2张状态牌+1点力量"},{"id":"medicalKit","name":"医疗箱","desc":"状态牌可以打出(0费+消耗)"},{"id":"toughBandages","name":"坚韧绷带","desc":"每弃1张牌获得3点格挡"},{"id":"membershipCard","name":"会员卡","desc":"商店物品价格减半"},{"id":"bronzeScales","name":"青铜甲","desc":"战斗开始+6荆棘;回合末荆棘-1"},{"id":"akabeko","name":"赤牛","desc":"每场战斗第一次攻击额外造成8点伤害"},{"id":"mango","name":"芒果","desc":"永久+14最大生命值"},{"id":"runicDome","name":"符文穹顶","desc":"每回合合+1点能量;无法看到敌人意图"},{"id":"pandorasBox","name":"潘多拉魔盒","desc":"获得时消除所有打击和防御,替换为随机卡牌"}]};
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+    const el = document.getElementById('tab-'+this.dataset.tab);
+    if (el) el.classList.add('active');
+  });
+});
+
+function tag(t,c){return '<span class="tag '+c+'">'+t+'</span>'}
+function esc(s){return String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// === CARDS ===
+function renderCards(filterFn) {
+  const g = document.getElementById('cardGrid'); if(!g) return;
+  const items = DATA.cards.filter(filterFn);
+  const ct = document.getElementById('cardCount'); if(ct) ct.textContent = items.length;
+  g.innerHTML = items.map(function(c){
+    var icon = c.type==='attack'?'&#x2694;':c.type==='power'?'&#x1F52E;':'&#x1F6E1;';
+    var tl = {attack:'攻击',power:'能力',skill:'技能'}[c.type]||c.type;
+    var rl = {basic:'基础',common:'普通',uncommon:'罕见',rare:'稀有'}[c.rarity]||c.rarity;
+    var cl = c.c==='-1'?'X':c.c;
+    var tgt = {all:'全体',self:'自身',enemy:'单体'}[c.target]||c.target;
+    var cc = 'e'+Math.min(3,parseInt(c.c)||0);
+    return '<div class="entry"><div class="card-header"><div class="card-icon">'+icon+'</div><div><div class="name">'+esc(c.name)+'</div><div class="sub">'+tag(tl,c.type)+tag(rl,c.rarity)+tag(tgt,c.target)+'</div></div></div><div class="cost '+cc+'">'+cl+'费</div><div class="desc">'+esc(c.desc)+'</div><div class="desc" style="color:#AD8BFF;margin-top:3px;font-size:11px"><b>升级:</b> '+esc(c.uDesc)+'</div></div>';
+  }).join('');
+}
+function filterCards(){
+  var q=(document.getElementById('cardSearch')||{}).value||'';q=q.toLowerCase();
+  var type=(document.getElementById('cardType')||{}).value||'';
+  var rar=(document.getElementById('cardRarity')||{}).value||'';
+  var ch='';var ab=document.querySelector('#charFilter .active');if(ab)ch=ab.dataset.char||'';
+  renderCards(function(c){
+    if(type&&c.type!==type)return 0;if(rar&&c.rarity!==rar)return 0;
+    if(ch&&c._char!==ch)return 0;
+    if(q&&!c.name.includes(q)&&!c.desc.toLowerCase().includes(q)&&!c.id.toLowerCase().includes(q))return 0;
+    return 1;
+  });
+}
+function setCharFilter(el,ch){
+  document.querySelectorAll('#charFilter .filter-btn').forEach(function(b){b.classList.remove('active')});
+  el.classList.add('active');filterCards();
+}
+
+// === RELICS ===
+function renderRelics(fn){
+  var g=document.getElementById('relicGrid');if(!g)return;
+  var items=DATA.relics.filter(fn);
+  var ct=document.getElementById('relicCount');if(ct)ct.textContent=items.length;
+  g.innerHTML=items.map(function(r){return '<div class="entry"><div class="name">&#x1F48E; '+esc(r.name)+'</div><div class="desc">'+esc(r.desc)+'</div></div>'}).join('');
+}
+function filterRelics(){var q=(document.getElementById('relicSearch')||{}).value||'';q=q.toLowerCase();renderRelics(function(r){return !q||r.name.includes(q)||r.desc.toLowerCase().includes(q);});}
+
+// === ENEMIES ===
+var ENEMIES_DATA=[{n:'史莱姆',a:1,h:14,s:2.0,d:'狂怒(HP≤30%)',mv:'攻击→防御→debuff→攻击'},{n:'哥布林',a:1,h:13,s:3.0,mv:'攻击→防御→多段→攻击'},{n:'虫',a:1,h:15,s:2.0,mv:'攻击→防御→debuff→攻击'},{n:'邪教徒',a:1,h:14,s:2.0,mv:'攻击→buff→攻击→攻击'},{n:'颚虫',a:1,h:16,s:2.0,mv:'攻击→防御→buff→攻击'},{n:'甲壳怪',a:1,h:16,s:3.0,mv:'攻击→防御→攻击→buff'},{n:'毒蜘蛛',a:1,h:14,s:3.0,d:'吸血8%',mv:'多段→攻击→debuff→攻击'},{n:'幽灵',a:1,h:15,s:3.0,mv:'攻击→攻击→debuff→塞牌'},{n:'骷髅兵',a:1,h:15,s:3.0,mv:'攻击→攻击→防御→多段'},{n:'毛虫',a:1,h:15,s:3.0,mv:'攻击→防御→攻击→debuff'},{n:'刺球史莱姆',a:1,h:16,s:3.0,d:'反击(2)',mv:'攻击→攻击→防御→攻击'},{n:'双生哥布林',a:1,h:10,s:3.0,mv:'多段→攻击→防御→攻击'},{n:'真菌兽',a:1,h:16,s:3.0,mv:'攻击→攻击→buff→攻击'},{n:'头目',a:1,h:30,s:3.0,el:1,d:'每打非攻击+1力;半血暴怒 | 狂怒(HP≤40%), 特殊反应',mv:'buff→buff→攻击→buff…'},{n:'Lagavulin',a:1,h:30,s:3.0,el:1,d:'先制1虚1易;回合+1力 | 吸血8%, 先制',mv:'debuff→debuff→攻击→攻击…'},{n:'厄运教徒',a:1,h:16,s:3.0,mv:'攻击→debuff→攻击→buff'},{n:'幽影',a:1,h:12,s:4.0,d:'幽灵',mv:'攻击→debuff→攻击→debuff'},{n:'奴贩',a:2,h:24,s:3.0,mv:'攻击→攻击→抽能→攻击'},{n:'百夫长',a:2,h:24,s:4.0,mv:'攻击→攻击→buff→防御'},{n:'秘术师',a:2,h:20,s:4.0,mv:'攻击→debuff→buff→治疗'},{n:'诅咒术士',a:2,h:26,s:4.0,d:'攻击塞伤口',mv:'攻击→debuff→debuff→攻击'},{n:'蛇女',a:2,h:28,s:5.0,mv:'攻击→攻击→防御→攻击'},{n:'蛇花',a:2,h:26,s:3.0,mv:'攻击→debuff→多段→攻击'},{n:'被选者',a:2,h:28,s:3.0,mv:'攻击→buff→攻击→buff'},{n:'鸟人',a:2,h:30,s:4.0,mv:'多段→攻击→防御→攻击'},{n:'自爆者',a:2,h:20,s:3.0,d:'死亡爆炸12伤 | 死亡爆发(12伤)',mv:'攻击→buff→攻击→攻击'},{n:'抽能者',a:2,h:28,s:4.0,mv:'攻击→抽能→防御→攻击'},{n:'毒蛇',a:2,h:26,s:4.0,mv:'攻击→debuff→攻击→防御'},{n:'山贼',a:2,h:25,s:4.0,mv:'攻击→攻击→buff→塞牌'},{n:'法师',a:2,h:22,s:4.0,mv:'攻击→debuff→攻击→buff'},{n:'甲壳寄生',a:2,h:28,s:4.0,mv:'攻击→攻击→防御→攻击'},{n:'窃贼',a:2,h:24,s:4.0,mv:'攻击→攻击→防御→多段'},{n:'伤口小鬼',a:2,h:14,s:3.0,mv:'塞牌→攻击→攻击→防御'},{n:'治愈僧',a:2,h:24,s:4.0,mv:'治疗→攻击→buff→攻击'},{n:'眼镜蛇',a:2,h:30,s:4.0,mv:'攻击→debuff→攻击→防御'},{n:'墓穴守卫',a:2,h:50,s:4.0,el:1,d:'先制12甲;反击3;每回合+2力 | 反击(3), 先制',mv:'buff→攻击→防御→攻击…'},{n:'监工',a:2,h:48,s:4.0,el:1,d:'先制12甲;半血暴怒 | 狂怒(HP≤35%), 先制',mv:'buff→攻击→攻击→buff…'},{n:'奴贩团',a:2,h:46,s:4.0,el:1,d:'攻击塞伤口',mv:'攻击→debuff→防御→debuff'},{n:'厄运骑士',a:2,h:38,s:6.0,el:1,mv:'攻击→debuff→多段→buff'},{n:'暗影',a:3,h:42,s:5.0,d:'吸血20%, 攻击塞伤口',mv:'攻击→debuff→多段→攻击'},{n:'尖塔之灵',a:3,h:44,s:4.0,d:'吸血15%',mv:'攻击→攻击→buff→攻击'},{n:'镜面守卫',a:3,h:45,s:8.0,el:1,d:'奇数回合无敌锁血(可挂Debuff);偶数回合猛攻',mv:'buff→多段→buff'},{n:'巨首',a:3,h:50,s:5.0,mv:'攻击→反馈→防御→攻击'},{n:'骑士',a:3,h:42,s:5.0,mv:'攻击→防御→攻击→buff'},{n:'恶魔',a:3,h:52,s:5.0,d:'每回+2力;半血暴怒;吸血 | 狂怒(HP≤40%), 吸血15%',mv:'攻击→buff→多段→攻击'},{n:'螺壳怪',a:3,h:40,s:4.0,d:'反击(4)',mv:'防御→攻击→buff→攻击'},{n:'石魔像',a:3,h:46,s:5.0,d:'反射15%',mv:'攻击→防御→攻击→buff'},{n:'虚空恶魔',a:3,h:40,s:5.0,mv:'攻击→buff→多段→攻击'},{n:'狂战士',a:3,h:34,s:5.0,d:'狂怒(HP≤50%)',mv:'多段→buff→攻击→攻击'},{n:'梦魅之灵',a:3,h:30,s:4.0,d:'攻击塞伤口',mv:'塞牌→攻击→debuff→攻击'},{n:'反馈法师',a:3,h:38,s:5.0,mv:'攻击→反馈→防御→攻击'},{n:'转瞬即逝',a:3,h:70,s:5.0,mv:'攻击→攻击→攻击→攻击…'},{n:'腐蚀之心',a:3,h:50,s:5.0,d:'每回合+2力量',mv:'攻击→buff→多段→攻击'},{n:'暗影法师',a:3,h:38,s:5.0,mv:'攻击→debuff→攻击→塞牌'},{n:'暗影群',a:3,h:58,s:5.0,el:1,d:'先制10伤;吸血;生命链接 | 吸血15%, 生命链接, 先制',mv:'攻击→攻击→debuff→多段…'},{n:'星云',a:3,h:62,s:5.0,el:1,d:'狂怒(HP≤30%), 攻击塞伤口',mv:'攻击→buff→多段→攻击'},{n:'蜥蜴召唤师',a:3,h:56,s:5.0,el:1,d:'反击(3)',mv:'攻击→buff→攻击→塞牌'},{n:'史莱姆王',a:1,h:100,s:2.0,b:1,d:'先制1虚;半血分裂;召唤史莱姆 | 二阶段, 先制, 召唤',mv:'debuff→攻击→debuff→多段…'},{n:'六火亡魂',a:1,h:100,s:2.0,b:1,d:'先制4伤+2灼烧;召唤幽灵;半血暴怒 | 狂怒(HP≤50%), 先制, 召唤',mv:'攻击→塞牌→攻击→多段…'},{n:'巨石守卫',a:1,h:90,s:2.0,b:1,d:'先制30甲沉睡;受击+2甲;半血苏醒狂暴 | 二阶段, 先制, 嘲讽, 特殊反应',mv:'buff→buff→攻击→防御…'},{n:'毒巢女王',a:1,h:80,s:2.0,b:1,d:'先制2毒;召唤虫卵;攻击叠毒 | 先制, 召唤',mv:'debuff→攻击→debuff→攻击…'},{n:'毒虫卵',a:1,h:10,s:1.0},{n:'守卫者',a:2,h:160,s:2.0,b:1,d:'受攻击8甲;反伤;召唤甲壳;反击4 | 反击(4), 反射25%, 召唤, 嘲讽, 特殊反应',mv:'buff→攻击→防御→攻击…'},{n:'铜制机械',a:2,h:155,s:2.0,b:1,d:'受攻击+1力;破甲;100%吸血 | 吸血100%, 破盾, 特殊反应',mv:'buff→攻击→防御→攻击…'},{n:'觉醒者',a:3,h:220,s:3.0,b:1,d:'能力牌+1力;召唤邪教徒;二阶段+6力+6荆棘 | 狂怒(HP≤40%), 二阶段, 召唤, 特殊反应',mv:'buff→攻击→debuff→多段…'},{n:'时间吞噬者',a:3,h:210,s:3.0,b:1,d:'先制12伤+3易;召唤骷髅;反击5;反馈 | 反击(5), 先制, 召唤',mv:'debuff→攻击→攻击→防御…'},{n:'亡灵仆从',a:3,h:8,s:1.0,mv:'攻击→攻击→攻击→攻击'},{n:'亡灵君主',a:3,h:140,s:3.0,b:1,d:'每回合召唤亡灵仆从;击杀亡灵君主即可获胜 | 召唤',mv:'攻击→攻击→多段→攻击…'},{n:'镜像统领',a:2,h:130,s:2.0,b:1,d:'先制易伤;反射伤害;召唤镜像碎片 | 反击(0.15), 二阶段, 先制, 召唤',mv:'debuff→攻击→攻击→buff…'},{n:'镜像碎片',a:2,h:18,s:1.0,d:'死亡时为主体+2力',mv:'攻击→防御→攻击→攻击'},{n:'熵变体',a:3,h:170,s:3.0,b:1,d:'先制塞伤口;熵增腐蚀;低血量狂暴 | 狂怒(HP≤30%), 吸血6%, 攻击塞伤口, 先制',mv:'塞牌→攻击→debuff→攻击…'},{n:'回声',a:3,h:42,s:4.0,el:1,d:'先制记录;回声反击;你强它更强 | 吸血10%, 先制, 回声',mv:'debuff→攻击→攻击→多段…'},{n:'思维漩涡',a:3,h:50,s:5.0,el:1,d:'每回合吸走1张手牌;用其效果反击;吸多则强 | 吸牌',mv:'攻击→攻击→防御→多段…'},{n:'抄袭者',a:2,h:38,s:4.0,el:1,d:'先制窃取;每回复制弃牌堆1张牌 | 攻击塞伤口, 先制',mv:'debuff→攻击→攻击→多段…'}];
+
+function renderEnemies(fn){
+  var g=document.getElementById('enemyGrid');if(!g)return;
+  var items=ENEMIES_DATA.filter(fn);
+  var ct=document.getElementById('enemyCount');if(ct)ct.textContent=items.length;
+  g.innerHTML=items.map(function(e){
+    var cls=e.b?'boss-entry':e.el?'elite-entry':'';
+    var tt=e.b?tag('BOSS','boss'):e.el?tag('精英','elite'):tag('普通','basic');
+    var dd=e.d?'<div class="desc" style="margin-top:2px">'+esc(e.d)+'</div>':'';
+    var mv=e.mv?'<div class="desc" style="margin-top:2px;color:#AD8BFF;font-size:11px">动作: '+esc(e.mv)+'</div>':'';
+    return '<div class="entry '+cls+'"><div class="name">'+esc(e.n)+'</div><div class="sub">'+tag('幕'+e.a,'common')+tt+'</div><div class="desc">基础HP: <span class="dmg">'+e.h+'</span> | 成长: <span class="blk">'+e.s+'</span></div>'+dd+mv+'</div>';
+  }).join('');
+}
+function filterEnemies(){
+  var q=(document.getElementById('enemySearch')||{}).value||'';q=q.toLowerCase();
+  var a=(document.getElementById('enemyAct')||{}).value||'';
+  var t=(document.getElementById('enemyType')||{}).value||'';
+  renderEnemies(function(e){
+    if(a&&e.a!==parseInt(a))return 0;if(t==='elite'&&!e.el&&!e.b)return 0;
+    if(t==='boss'&&!e.b)return 0;if(t==='normal'&&(e.el||e.b))return 0;
+    if(q&&!e.n.includes(q))return 0;return 1;
+  });
+}
+
+// === POTIONS ===
+function renderPotions(fn){
+  var g=document.getElementById('potionGrid');if(!g)return;
+  var p=[{n:'生命药水',d:'回复40HP'},{n:'能量药水',d:'+3能量'},{n:'力量药水',d:'本场+6力量'},{n:'格挡药水',d:'+20格挡'},{n:'毒雾药水',d:'全体9毒'},{n:'爆炸药水',d:'全敌20伤'},{n:'迅捷药水',d:'抽3张'},{n:'敏捷药水',d:'本场+10敏'},{n:'再生药水',d:'3回每回+5HP'},{n:'异教徒药水',d:'+5力+2易伤'},{n:'烈焰药水',d:'单敌30'},{n:'护甲药水',d:'+2金属化'},{n:'弹跳药水',d:'10+10随机'},{n:'幽灵药水',d:'15血+15甲'},{n:'赌徒骰',d:'弃所有抽等量+1'},{n:'能力药水',d:'随机能力牌'},{n:'虚弱药水',d:'全体3虚'},{n:'姿态药水',d:'宁静/怒火'},{n:'青铜液',d:'+3荆棘'},{n:'连击药水',d:'本回攻击2次'},{n:'赋能药水',d:'+3力+3敏'},{n:'复制药水',d:'下张打2次'},{n:'精灵药水',d:'免死回30%'},{n:'记忆液',d:'回收消耗堆'},{n:'钢之精华',d:'+25甲-50%伤'},{n:'无色药水',d:'稀有卡费-1'},{n:'混沌药水',d:'随机打3张'},{n:'集中药水',d:'+3集中'},{n:'远古药水',d:'+2人工制品'},{n:'类固醇药水',d:'+6力战后消'},{n:'果汁',d:'永久+5最大HP'},{n:'狂怒药水',d:'怒火姿态(观者)'},{n:'念力药水',d:'+6念力'},{n:'寒冰药水',d:'2冰球+8甲'},{n:'雷电药水',d:'2闪电+12伤'},{n:'净化药水',d:'移除所有Debuff'},{n:'铁壁药水',d:'30甲+3金属化'},{n:'回收药水',d:'弃牌堆回收3张'},{n:'献祭药水',d:'自残5+3力+15甲'},{n:'翻倍药水',d:'力量翻倍(战后消)'},{n:'缓冲药水',d:'+2缓冲'},{n:'磁力药水',d:'手牌费-1'},{n:'复苏药水',d:'回40HP+清伤口'},{n:'狂暴药水',d:'+2力+2敏+抽2'},{n:'虚空药水',d:'+4印记+8甲'},{n:'辉星药水',d:'+6辉星'},{n:'铸剑药水',d:'+8铸剑'},{n:'仆从药水',d:'+5仆从+10甲'},{n:'潮汐药水',d:'Lv+3+涌'},{n:'幸运药水',d:'随机正面效果'}];
+  var items=p.filter(fn);var ct=document.getElementById('potionCount');if(ct)ct.textContent=items.length;
+  g.innerHTML=items.map(function(x){return '<div class="entry"><div class="name">&#x1F9EA; '+esc(x.n)+'</div><div class="desc" style="color:#4CAF50">'+esc(x.d)+'</div></div>'}).join('');
+}
+function filterPotions(){var q=(document.getElementById('potionSearch')||{}).value||'';q=q.toLowerCase();renderPotions(function(p){return !q||p.n.includes(q)||p.d.includes(q);});}
+
+// === EVENTS ===
+function renderEvents(fn){
+  var g=document.getElementById('eventGrid');if(!g)return;
+  var ev=[{n:'黄金神殿',o:'供奉(125金/失5血) / 祈祷(回30%) / 离开'},{n:'遗忘之泉',o:'移除1牌 / 离开'},{n:'铁匠铺',o:'升级攻击或技能 / 离开'},{n:'深渊之镜',o:'复制1牌入牌库 / 离开'},{n:'暗影交易',o:'失5血获遗物 / 离开'},{n:'占卜师',o:'看顶3留1 / 离开'},{n:'神秘箱子',o:'55-110金币 / 离开'},{n:'疗愈之泉',o:'回复30%HP / 离开'},{n:'流浪商人',o:'失20血获稀有遗物 / 离开'},{n:'战斗竞技场',o:'精英战高额金币 / 离开'},{n:'神秘雕像',o:'失8血获随机遗物 / 离开'},{n:'流浪医者',o:'回复50% / 升级随机牌 / 离开'},{n:'附魔师',o:'免费升级1牌 / 离开'},{n:'审讯者',o:'精英战1.5倍金 / 付25金 / 失5血'},{n:'图书馆',o:'免费1牌+5HP / 离开'},{n:'休眠守卫',o:'失3血 / 精英战双倍金 / 离开'},{n:'蘑菇地',o:'+8血随机效果 / 25金 / 离开'},{n:'回廊',o:'50-80金或失10血 / 离开'},{n:'幽灵',o:'失3HP上限升2牌 / 30金 / 无视'},{n:'变形器',o:'变形1手牌 / 离开'},{n:'赌桌',o:'下注50金(50%双倍) / 离开'},{n:'图书馆(大)',o:'从5张选2张 / 离开'},{n:'神秘蘑菇',o:'15HP+1力 / 无视'},{n:'神秘宝箱',o:'失5血+稀有遗物 / 离开'},{n:'赏金猎人',o:'下个精英+30金 / 拒绝'},{n:'老乞丐',o:'25金换遗物 / 离开'},{n:'神秘祭坛',o:'失5血+200金 / 精英遗物'}];
+  var items=ev.filter(fn);var ct=document.getElementById('eventCount');if(ct)ct.textContent=items.length;
+  g.innerHTML=items.map(function(x){return '<div class="entry"><div class="name">&#x2753; '+esc(x.n)+'</div><div class="desc" style="color:#64B5F6">'+esc(x.o)+'</div></div>'}).join('');
+}
+function filterEvents(){var q=(document.getElementById('eventSearch')||{}).value||'';q=q.toLowerCase();renderEvents(function(e){return !q||e.n.includes(q)||e.o.includes(q);});}
+
+renderCards(function(){return 1;});renderRelics(function(){return 1;});renderEnemies(function(){return 1;});renderPotions(function(){return 1;});renderEvents(function(){return 1;});
+</script>
+</body>
+</html>

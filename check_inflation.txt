@@ -1,0 +1,11 @@
+// 通胀:回合始手牌+1费
+	  if(G._inflation>0){
+	    var _infBlk=0,_infCap=G._inflationUpg?99:3;
+	    G.hand.forEach(function(cd){
+	      if(cd.c>=0&&cd.c<_infCap){cd.c++;cd._costAdjusted=true;_infBlk++;}
+	    });
+	    if(_infBlk>0){
+	      var _infBlkMult=G._inflationUpg?10:6;
+	      G.block+=_infBlk*_infBlkMult;
+	      G._inflationBonusReady=(G._inflationUpg?2:1); // 首张+1费牌获得额外能量(可叠加)
+	      addLog("💰 通胀:

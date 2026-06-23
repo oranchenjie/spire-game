@@ -1,0 +1,9 @@
+C:\Users\25065\Desktop\AI game\_tc.js:941
+addCard({id:'gravityWell',name:'引力井',c:1,type:'skill',rarity:'uncommon',target:'self',desc:'全体2易+2虚;耗1辉星+全体1毒+抽1',uDesc:'全体3易+3虚;耗1辉星+全体2毒+抽2',cP:g=>(g.starShards||0)>=1,f:(g,_,c)=>{var v=c.u?3:2;g.enemies.forEach(function(e){if(e.hp>0){e.vulnerable=(e.vulnerable||0)+v;e.weak=(e.weak||0)+v;}});if((g.starShards||0)>=1){g.starShards-=1;var p=c.u?2:1;g.enemies.forEach(function(e){if(e.hp>0)e.poison=(e.poison||0)+p;});drawCards(c.u?2:1);addFX(480,240,'🌀引力井!'+v+'易/虚+'+p+'毒','#E040FB');}}});if((g.starShards||0)>=2){g.starShards-=2;var p=c.u?2:1;g.enemies.forEach(function(e){if(e.hp>0)e.poison=(e.poison||0)+p;});drawCards(c.u?2:1);addFX(480,240,'🌀引力井!'+v+'易/虚+'+p+'毒','#E040FB');}}});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^
+
+SyntaxError: Unexpected token '}'
+    at wrapSafe (node:internal/modules/cjs/loader:1789:18)
+    at checkSyntax (node:internal/main/check_syntax:76:3)
+
+Node.js v26.1.0

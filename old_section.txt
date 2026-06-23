@@ -1,0 +1,53 @@
+// ====== 商店主界面 ======
+  // 商品展示
+  var _items=G.shopItems||[];
+  var _perRow=4,_cardW=210,_cardH=120,_gapX=14,_gapY=14,_rows=Math.ceil(_items.length/_perRow);
+  var _totalW=_perRow*_cardW+(_perRow-1)*_gapX,_sx=(W-_totalW)/2;
+
+  _items.forEach(function(_it,_idx){
+    var _row=Math.floor(_idx/_perRow),_col=_idx%_perRow;
+    var _x=_sx+_col*(_cardW+_gapX),_y=72+_row*(_cardH+_gapY);
+    if(_y+_cardH>H-10)return;
+    var _hover=G.mx>=_x&&G.mx<=_x+_cardW&&G.my>=_y&&G.my<=_y+_cardH;
+    var _canAfford=G.gold>=_it.price;
+
+    // 卡片背景
+    ctx.shadowColor=_hover?'rgba(200,168,255,0.25)':'rgba(0,0,0,0.2)';ctx.shadowBlur=_hover?25:8;
+    var _bgGrad=ctx.createLinearGradient(_x,_y,_x,_y+_cardH);
+    _bgGrad.addColorStop(0,_hover?'rgba(25,18,55,0.92)':'rgba(18,12,45,0.85)');
+    _bgGrad.addColorStop(1,_hover?'rgba(18,12,40,0.88)':'rgba(12,8,30,0.8)');
+    ctx.fillStyle=_bgGrad;ctx.beginPath();ctx.roundRect(_x,_y,_cardW,_cardH,12);ctx.fill();ctx.shadowBlur=0;
+    var _bc=_it.isRelic?'rgba(255,215,0,0.2)':_it.isPotion?'rgba(100,200,80,0.2)':_it.isRemove?'rgba(255,80,80,0.2)':_it.isHeal?'rgba(76,175,80,0.2)':'rgba(200,168,255,0.15)';
+    ctx.strokeStyle=_hover?_bc.replace('0.2','0.5'):_bc;ctx.lineWidth=_hover?2:1;
+    ctx.beginPath();ctx.roundRect(_x,_y,_cardW,_cardH,12);ctx.stroke();
+
+    // 图标
+    var _icon='\u{1f3b0}';if(_it.isRelic)_icon='\u{1f48e}';else if(_it.isPotion)_icon='\u{1f9ea}';else if(_it.isRemove)_icon='\u{1f5d1}\u{fe0f}';else if(_it.isHeal)_icon='\u2764\u{fe0f}';else if(_it.type==='attack')_icon='\u2694\u{fe0f}';else if(_it.type==='skill')_icon='\u{1f6e1}\u{fe0f}';else if(_it.type==='power')_icon='\u2b50';
+    ctx.shadowColor='rgba(255,255,255,0.15)';ctx.shadowBlur=10;
+    ctx.fillStyle='rgba(255,255,255,0.85)';ctx.font='28px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(_icon,_x+_cardW/2,_y+30);ctx.shadowBlur=0;
+
+    // 名称
+    ctx.fillStyle=_canAfford?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.35)';ctx.font='bold 12px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(_it.name||'\u672a\u77e5',_x+_cardW/2,_y+58);
+
+    // 描述(简短)
+    ctx.fillStyle='rgba(200,180,240,0.5)';ctx.font='8px Arial';ctx.textAlign='center';ctx.textBaseline='top';
+    var _desc=_it.desc||(_it.isRemove?'\u79fb\u9664\u4e00\u5f20\u724c':_it.isHeal?'\u56de\u590d'+Math.floor(G.maxHp*0.25)+'HP':'');
+    var _dw=wrap(_desc,Math.floor((_cardW-16)/7));_dw.slice(0,2).forEach(function(_dl,_di){ctx.fillText(_dl,_x+_cardW/2,_y+70+_di*10);});
+
+    // 价格
+    ctx.fillStyle=_canAfford?'#FFD700':'rgba(255,100,100,0.5)';ctx.font='bold 13px Arial';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.shadowColor=_canAfford?'rgba(255,215,0,0.2)':'rgba(0,0,0,0)';ctx.shadowBlur=6;
+    ctx.fillText('\u{1fa99} '+_it.price,_x+_cardW/2,_y+_cardH-6);ctx.shadowBlur=0;
+
+    // 费用标识(卡牌)
+    if(!_it.isRelic&&!_it.isPotion&&!_it.isRemove&&!_it.isHeal){
+      ctx.fillStyle='#AD8BFF';ctx.beginPath();ctx.arc(_x+20,_y+20,10,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#fff';ctx.font='bold 9px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(_it.c===-1?'X':_it.c,_x+20,_y+20);
+    }
+  });
+
+  // 底部信息
+  ctx.fillStyle='rgba(200,180,240,0.25)';ctx.font='9px Arial';ctx.textBaseline='bottom';ctx.textAlign='center';ctx.fillText('\u70b9\u51fb\u8d2d\u4e70 \u00b7 \u53f3\u952e\u79bb\u5f00',480,H-10);
+}

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍉 接水果大作战</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+body {
+  background: linear-gradient(145deg, #0f0c29, #302b63, #24243e);
+  height: 100vh; display: flex; justify-content: center; align-items: center;
+  font-family: 'Segoe UI', Arial, sans-serif; overflow: hidden;
+}
+.game-wrapper {
+  background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #90EE90 70%, #228B22 100%);
+  border-radius: 24px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  position: relative;
+}
+canvas {
+  display: block; border-radius: 16px; cursor: none;
+  background: linear-gradient(180deg, #87CEEB 0%, #B0E0E6 40%, #90EE90 60%, #228B22 100%);
+}
+.ui-overlay {
+  position: absolute; top: 12px; left: 12px; right: 12px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  pointer-events: none; padding: 16px 20px;
+}
+.score-board {
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+  padding: 10px 20px; border-radius: 14px; color: #fff;
+  font-size: 22px; font-weight: 700; letter-spacing: 1px;
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex; gap: 24px;
+}
+.score-board span { color: #FFD700; }
+.combo-display {
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(8px);
+  padding: 10px 18px; border-radius: 14px; color: #fff;
+  font-size: 18px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+  opacity: 0; transition: opacity 0.3s;
+}
+.combo-display.show { opacity: 1; }
+.combo-display em { color: #FF6B6B; font-style: normal; }
+.start-screen, .game-over-screen {
+  position: absolute; inset: 12px; border-radius: 16px;
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: center; pointer-events: auto;
+}
+.start-screen {
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(6px);
+}
+.game-over-screen {
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+  display: none;
+}
+.game-over-screen.show { display: flex; }
+.start-screen h1 {
+  font-size: 52px; color: #fff; margin-bottom: 8px;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.start-screen p {
+  color: rgba(255,255,255,0.8); font-size: 18px; margin-bottom: 30px;
+}
+.btn {
+  background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+  border: none; color: #fff; font-size: 22px; font-weight: 700;
+  padding: 16px 48px; border-radius: 50px; cursor: pointer;
+  transition: all 0.25s; box-shadow: 0 8px 25px rgba(255,107,107,0.4);
+  letter-spacing: 1px; pointer-events: auto;
+}
+.btn:hover { transform: scale(1.07); box-shadow: 0 12px 35px rgba(255,107,107,0.6); }
+.btn:active { transform: scale(0.95); }
+.final-score { font-size: 28px; color: #FFD700; margin: 12px 0 24px; }
+.game-over-screen h2 { font-size: 42px; color: #fff; margin-bottom: 4px; }
+.hint { color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 16px; }
+.emojii { font-size: 48px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="game-wrapper">
+  <canvas id="game" width="600" height="700"></canvas>
+
+  <div class="ui-overlay">
+    <div class="score-board">
+      <div>🎯 <span id="scoreDisplay">0</span></div>
+      <div>⭐ <span id="highScoreDisplay">0</span></div>
+    </div>
+    <div class="combo-display" id="comboDisplay">🔥 连击 x<span id="comboCount">0</span></div>
+  </div>
+
+  <div class="start-screen" id="startScreen">
+    <div class="emojii">🍉🍎🍋🍇</div>
+    <h1>接水果大作战</h1>
+    <p>移动鼠标接住水果，小心炸弹！💣</p>
+    <button class="btn" id="startBtn">开始游戏</button>
+  </div>
+
+  <div class="game-over-screen" id="gameOverScreen">
+    <h2>💥 游戏结束</h2>
+    <div class="final-score">得分: <span id="finalScore">0</span></div>
+    <button class="btn" id="restartBtn">再来一局</button>
+    <div class="hint">提示: 连续接住水果可获得连击加分！</div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
+
+// DOM refs
+const scoreSpan = document.getElementById('scoreDisplay');
+const highScoreSpan = document.getElementById('highScoreDisplay');
+const comboDisplay = document.getElementById('comboDisplay');
+const comboCountSpan = document.getElementById('comboCount');
+const finalScoreSpan = document.getElementById('finalScore');
+const startScreen = document.getElementById('startScreen');
+const gameOverScreen = document.getElementById('gameOverScreen');
+
+// Game state
+let game = {
+  running: false, over: false,
+  score: 0, highScore: parseInt(localStorage.getItem('fruitHighScore')) || 0,
+  combo: 0, maxCombo: 0,
+  frame: 0, speed: 1,
+  basketX: W / 2,
+  items: [],
+  particles: [],
+  shake: 0,
+};
+
+const FRUITS = [
+  { emoji: '🍎', color: '#FF3B30', points: 10, size: 28 },
+  { emoji: '🍊', color: '#FF9500', points: 10, size: 28 },
+  { emoji: '🍋', color: '#FFD60A', points: 10, size: 26 },
+  { emoji: '🍇', color: '#AF52DE', points: 15, size: 30 },
+  { emoji: '🍉', color: '#34C759', points: 15, size: 30 },
+  { emoji: '🍓', color: '#FF2D55', points: 12, size: 24 },
+  { emoji: '🫐', color: '#5856D6', points: 12, size: 22 },
+  { emoji: '🍑', color: '#FFB07C', points: 12, size: 26 },
+  { emoji: '🥝', color: '#7AB86B', points: 15, size: 26 },
+  { emoji: '🍒', color: '#DC143C', points: 15, size: 22 },
+];
+const BOMB = { emoji: '💣', color: '#333', points: -999, size: 28 };
+const STAR = { emoji: '⭐', color: '#FFD700', points: 50, size: 20 };
+
+highScoreSpan.textContent = game.highScore;
+
+// --- Input ---
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  game.basketX = (e.clientX - rect.left) * scaleX;
+});
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  game.basketX = (e.touches[0].clientX - rect.left) * scaleX;
+}, { passive: false });
+
+// --- Objects ---
+function spawnItem() {
+  const r = Math.random();
+  let item;
+  if (r < 0.75) {
+    item = { ...FRUITS[Math.floor(Math.random() * FRUITS.length)], type: 'fruit' };
+  } else if (r < 0.88) {
+    item = { ...STAR, type: 'star' };
+  } else {
+    item = { ...BOMB, type: 'bomb' };
+  }
+  item.x = 30 + Math.random() * (W - 60);
+  item.y = -40;
+  item.vy = 1.5 + Math.random() * 1.5;
+  item.vx = (Math.random() - 0.5) * 0.8;
+  item.rotation = 0;
+  item.rotSpeed = (Math.random() - 0.5) * 0.05;
+  item.alive = true;
+  return item;
+}
+
+function spawnParticles(x, y, color, count = 12) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * 2 * Math.PI;
+    const speed = 1 + Math.random() * 4;
+    game.particles.push({
+      x, y, color,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 1,
+      life: 1, decay: 0.015 + Math.random() * 0.02,
+      size: 3 + Math.random() * 5,
+    });
+  }
+}
+
+function spawnTextParticle(x, y, text, color = '#fff') {
+  game.particles.push({
+    x, y, text, color, type: 'text',
+    vy: -2.5, life: 1, decay: 0.025,
+  });
+}
+
+// --- Update ---
+function update() {
+  if (!game.running || game.over) return;
+  game.frame++;
+
+  // Spawn items
+  const spawnRate = Math.max(15, 50 - game.speed * 2);
+  if (game.frame % Math.floor(spawnRate) === 0) {
+    game.items.push(spawnItem());
+    // Double spawn at high speed
+    if (game.speed > 8 && Math.random() < 0.3) game.items.push(spawnItem());
+  }
+
+  // Update items
+  for (let i = game.items.length - 1; i >= 0; i--) {
+    const item = game.items[i];
+    item.y += item.vy * (1 + game.speed * 0.06);
+    item.x += item.vx;
+    item.rotation += item.rotSpeed;
+
+    // Wobble
+    item.vx += Math.sin(game.frame * 0.02 + i) * 0.02;
+
+    // Keep in bounds
+    if (item.x < 20) item.x = 20;
+    if (item.x > W - 20) item.x = W - 20;
+
+    // Check catch
+    if (item.y > H - 65 && item.y < H - 25 &&
+        Math.abs(item.x - game.basketX) < 40) {
+      item.alive = false;
+      if (item.type === 'bomb') {
+        spawnParticles(item.x, item.y, '#FF4444', 30);
+        spawnParticles(item.x, item.y, '#FF8800', 20);
+        gameOver();
+        return;
+      } else if (item.type === 'star') {
+        game.score += item.points;
+        game.combo++;
+        if (game.combo > game.maxCombo) game.maxCombo = game.combo;
+        let bonus = Math.floor(game.combo / 3);
+        if (bonus > 0) {
+          const bonusPts = bonus * 5;
+          game.score += bonusPts;
+          spawnTextParticle(item.x, item.y, `+${item.points}+${bonusPts} 🔥`, '#FFD700');
+        } else {
+          spawnTextParticle(item.x, item.y, `+${item.points} ⭐`, '#FFD700');
+        }
+        spawnParticles(item.x, item.y, '#FFD700', 8);
+      } else {
+        game.score += item.points;
+        game.combo++;
+        if (game.combo > game.maxCombo) game.maxCombo = game.combo;
+        let bonus = Math.floor(game.combo / 3);
+        if (bonus > 0) {
+          const bonusPts = bonus * 3;
+          game.score += bonusPts;
+          spawnTextParticle(item.x, item.y, `+${item.points}+${bonusPts} 🔥`, item.color);
+        } else {
+          spawnTextParticle(item.x, item.y, `+${item.points}`, item.color);
+        }
+        spawnParticles(item.x, item.y, item.color, 6);
+      }
+      game.items.splice(i, 1);
+      continue;
+    }
+
+    // Remove if off screen
+    if (item.y > H + 50) {
+      if (item.type !== 'bomb') {
+        game.combo = 0;
+      }
+      game.items.splice(i, 1);
+    }
+  }
+
+  // Update particles
+  for (let i = game.particles.length - 1; i >= 0; i--) {
+    const p = game.particles[i];
+    p.x += p.vx || 0;
+    p.y += p.vy || 0;
+    if (p.vx !== undefined) p.vx *= 0.97;
+    p.vy = (p.vy || 0) + 0.05;
+    p.life -= p.decay || 0.02;
+    if (p.life <= 0) game.particles.splice(i, 1);
+  }
+
+  // Speed up slowly
+  game.speed = 1 + Math.floor(game.score / 50);
+  if (game.speed > 20) game.speed = 20;
+
+  // Shake decay
+  if (game.shake > 0) game.shake *= 0.9;
+  if (game.shake < 0.1) game.shake = 0;
+
+  // Update UI
+  scoreSpan.textContent = game.score;
+  if (game.score > game.highScore) {
+    game.highScore = game.score;
+    highScoreSpan.textContent = game.highScore;
+  }
+  if (game.combo >= 3) {
+    comboDisplay.classList.add('show');
+    comboCountSpan.textContent = game.combo;
+  } else {
+    comboDisplay.classList.remove('show');
+  }
+}
+
+function gameOver() {
+  game.running = false;
+  game.over = true;
+  game.shake = 15;
+  if (game.score > game.highScore) {
+    game.highScore = game.score;
+    localStorage.setItem('fruitHighScore', game.highScore);
+    highScoreSpan.textContent = game.highScore;
+  }
+  finalScoreSpan.textContent = game.score;
+  gameOverScreen.classList.add('show');
+}
+
+// --- Draw ---
+function draw() {
+  ctx.save();
+
+  // Screen shake
+  if (game.shake > 0.5) {
+    const sx = (Math.random() - 0.5) * game.shake;
+    const sy = (Math.random() - 0.5) * game.shake;
+    ctx.translate(sx, sy);
+  }
+
+  // Background gradient
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#87CEEB');
+  bg.addColorStop(0.35, '#B0E0E6');
+  bg.addColorStop(0.55, '#90EE90');
+  bg.addColorStop(0.75, '#7CCD7C');
+  bg.addColorStop(1, '#228B22');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Clouds
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  for (let i = 0; i < 4; i++) {
+    const cx = ((game.frame * 0.2 + i * 180) % (W + 100)) - 50;
+    const cy = 30 + i * 25;
+    drawCloud(ctx, cx, cy, 40 + i * 10);
+  }
+
+  // Draw items
+  for (const item of game.items) {
+    ctx.save();
+    ctx.translate(item.x, item.y);
+    ctx.rotate(item.rotation || 0);
+
+    // Glow
+    if (item.type === 'star') {
+      ctx.shadowColor = '#FFD700';
+      ctx.shadowBlur = 20;
+    }
+
+    const s = item.size || 28;
+    ctx.font = `${s}px Arial`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(item.emoji, 0, 0);
+
+    // Bomb fuse spark
+    if (item.type === 'bomb') {
+      ctx.shadowColor = '#FF4400';
+      ctx.shadowBlur = 10 + Math.sin(game.frame * 0.2) * 5;
+      ctx.fillStyle = '#FF4400';
+      ctx.beginPath();
+      ctx.arc(8, -16, 3 + Math.sin(game.frame * 0.3) * 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  // Draw basket/ catcher
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.3)';
+  ctx.shadowBlur = 15;
+  const bx = game.basketX;
+
+  // Basket body
+  ctx.fillStyle = '#8B4513';
+  ctx.beginPath();
+  ctx.moveTo(bx - 38, H - 38);
+  ctx.quadraticCurveTo(bx - 42, H - 55, bx - 28, H - 58);
+  ctx.lineTo(bx + 28, H - 58);
+  ctx.quadraticCurveTo(bx + 42, H - 55, bx + 38, H - 38);
+  ctx.closePath();
+  ctx.fill();
+
+  // Basket rim
+  ctx.strokeStyle = '#A0522D';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(bx - 40, H - 40);
+  ctx.quadraticCurveTo(bx, H - 48, bx + 40, H - 40);
+  ctx.stroke();
+
+  // Basket weave lines
+  ctx.strokeStyle = '#6B3410';
+  ctx.lineWidth = 1.5;
+  for (let i = -2; i <= 2; i++) {
+    ctx.beginPath();
+    ctx.moveTo(bx + i * 12, H - 42);
+    ctx.lineTo(bx + i * 14, H - 18);
+    ctx.stroke();
+  }
+
+  // Basket face
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.arc(bx - 10, H - 44, 4, 0, Math.PI, true);
+  ctx.arc(bx + 10, H - 44, 4, 0, Math.PI, true);
+  ctx.fill();
+
+  ctx.restore();
+
+  // Draw particles
+  for (const p of game.particles) {
+    ctx.globalAlpha = Math.max(0, p.life);
+    if (p.type === 'text') {
+      ctx.font = 'bold 22px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = 'rgba(0,0,0,0.5)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(p.text, p.x, p.y);
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+    ctx.save();
+  }
+  ctx.globalAlpha = 1;
+
+  // Speed indicator
+  if (game.running && game.speed > 3) {
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText(`⚡ 等级 ${game.speed}`, 16, H - 12);
+  }
+
+  ctx.restore();
+}
+
+function drawCloud(ctx, x, y, size) {
+  ctx.beginPath();
+  ctx.arc(x, y, size * 0.5, 0, Math.PI * 2);
+  ctx.arc(x + size * 0.4, y - size * 0.15, size * 0.4, 0, Math.PI * 2);
+  ctx.arc(x + size * 0.8, y, size * 0.45, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// --- Loop ---
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// --- Start / Restart ---
+function startGame() {
+  game.running = true;
+  game.over = false;
+  game.score = 0;
+  game.combo = 0;
+  game.maxCombo = 0;
+  game.frame = 0;
+  game.speed = 1;
+  game.items = [];
+  game.particles = [];
+  game.shake = 0;
+  game.basketX = W / 2;
+  scoreSpan.textContent = '0';
+  startScreen.style.display = 'none';
+  gameOverScreen.classList.remove('show');
+}
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('restartBtn').addEventListener('click', startGame);
+
+// Start loop
+loop();
+</script>
+</body>
+</html>
